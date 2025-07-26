@@ -16,4 +16,4 @@ INSERT INTO MEMBERSHIP (membership_id, user_id, club_id) VALUES
 (2, 1, 2),  -- Ivan i u Dalmacija TC
 (3, 2, 1),  -- Ana u TK Požega
 (4, 3, 2),  -- Petra u Dalmacija TC
-(5, 4, 1);  -- Marko (admin) također u TK Zagreb
+(5, 4, 1);  -- Marko (admin) također u TK Požega
