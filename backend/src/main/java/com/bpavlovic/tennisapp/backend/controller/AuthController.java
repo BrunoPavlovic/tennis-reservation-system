@@ -1,7 +1,6 @@
 package com.bpavlovic.tennisapp.backend.controller;
 
 import com.bpavlovic.tennisapp.backend.dto.UserRegistrationDto;
-import com.bpavlovic.tennisapp.backend.model.User;
 import com.bpavlovic.tennisapp.backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,8 +20,8 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRegistrationDto userRegistrationDto){
         try {
-            User user = authService.registerUser(userRegistrationDto);
-            return new ResponseEntity<>("User: " + user.getEmail() + " is registered successfully!", HttpStatus.OK);
+            authService.registerUser(userRegistrationDto);
+            return new ResponseEntity<>("User is registered successfully!", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
