@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class ClubMapper {
     public ClubDto toDto(Club club){
         ClubDto clubDto = new ClubDto();
-        clubDto.setName(club.getClubName());
+        clubDto.setName(club.getName());
         clubDto.setCreditPrice(clubDto.getCreditPrice());
         return clubDto;
     }

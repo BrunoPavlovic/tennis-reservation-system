@@ -23,4 +23,8 @@ public class ClubService {
                 .map(clubMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    public Club getClubByName(String clubName){
+        return clubRepository.findByName(clubName);
+    }
 }
