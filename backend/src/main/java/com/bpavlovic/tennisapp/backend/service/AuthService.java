@@ -26,7 +26,7 @@ public class AuthService {
         User user = userMapper.toEntity(userRegistrationDto);
         userRepository.save(user);
 
-        MembershipDto membershipDto = membershipMapper.toDto(user.getUserId(), userRegistrationDto.getClubName());
+        MembershipDto membershipDto = membershipMapper.toDto(user.getUserId(), userRegistrationDto.getClub());
         membershipService.addMembership(membershipDto);
     }
 }
