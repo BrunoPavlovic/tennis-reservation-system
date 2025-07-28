@@ -3,4 +3,5 @@ export interface Registration {
     lastName: string;
     email: string;
     password: string;
+    club: string;
 }

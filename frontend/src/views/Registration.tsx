@@ -1,4 +1,5 @@
 import React from "react";
+import { Club } from "../types/Club";
 import { useRegister } from "../hooks/useRegister";
 import logo from "../assets/match_point_logo.png";
 import {
@@ -10,12 +11,12 @@ import {
     MDBCardBody,
     MDBCardImage,
     MDBInput,
-    MDBIcon,
+    MDBIcon,    
 }
-    from 'mdb-react-ui-kit';
+from 'mdb-react-ui-kit';
 
 const Register: React.FC = () => {
-    const { form, error, handleChange, handleSubmit } = useRegister();
+    const { form, clubs, error, handleChange, handleSubmit } = useRegister();
 
     return (
         <MDBContainer fluid className="d-flex align-items-center justify-content-center" style={{ height: "100vh" }}>
@@ -39,6 +40,18 @@ const Register: React.FC = () => {
                             <div className="d-flex flex-row align-items-center mb-4">
                                 <MDBIcon fas icon="lock me-3" size='lg' />
                                 <MDBInput label='Password' id='password' type='password' name="password" value={form.password} onChange={handleChange} />
+                            </div>
+
+                            <div className="d-flex flex-row align-items-center mb-4">
+                                <MDBIcon fas icon="location-arrow me-3" size='lg' />
+                                <select className="form-select w-100" name="club" value={form.club} onChange={handleChange} required>
+                                    <option value="" disabled hidden>Select a club</option>
+                                    {clubs.map((club: Club) => (
+                                    <option key={club.name} value={club.name}>
+                                        {club.name}
+                                    </option>
+                                    ))}
+                                </select>
                             </div>
 
                             {error && <div className="text-danger">{error}</div>}

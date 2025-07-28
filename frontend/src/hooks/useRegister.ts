@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Registration } from "../types/Registration";
 import api from "../services/axios";
 import { useNavigate } from "react-router-dom";
@@ -9,12 +9,27 @@ export const useRegister = () => {
     lastName: "",
     email: "",
     password: "",
+    club: "",
   });
 
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [clubs, setClubs] = useState([]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    const fetchClubs = async () => {
+      try {
+        const response = await api.get('/clubs');
+        setClubs(response.data);
+      } catch (err) {
+        console.error('Error fetching clubs:', err);
+      }
+    };
+
+    fetchClubs();
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -31,6 +46,7 @@ export const useRegister = () => {
   return {
     form,
     error,
+    clubs,
     handleChange,
     handleSubmit,
   };
