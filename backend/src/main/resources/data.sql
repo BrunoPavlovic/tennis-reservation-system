@@ -13,7 +13,6 @@ INSERT INTO CLUB (club_id, club_name, credit_price, created_at) VALUES
 -- Članarine
 INSERT INTO MEMBERSHIP (membership_id, user_id, club_id) VALUES
 (1, 1000, 1),  -- Ivan u TK Požega
-(2, 1000, 2),  -- Ivan i u Dalmacija TC
 (3, 2000, 1),  -- Ana u TK Požega
 (4, 3000, 2),  -- Petra u Dalmacija TC
 (5, 4000, 1);  -- Marko (admin) također u TK Požega
