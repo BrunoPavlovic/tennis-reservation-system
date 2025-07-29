@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Club } from "../types/Club";
 import { useRegister } from "../hooks/useRegister";
 import logo from "../assets/match_point_logo.png";
@@ -68,6 +69,10 @@ const Register: React.FC = () => {
 
                             {error && <div className="text-danger">{error}</div>}
                             <MDBBtn className='mb-4' size='lg' type="submit">Sign up</MDBBtn>
+                            <p className="text-center">
+                                Already have an account?{' '}
+                                <Link to="/login" className="text-primary" style={{ textDecoration: 'underline' }}>Login here</Link>
+                            </p>
                             </form>
                         </MDBCol>
                         <MDBCol md='10' lg='5' className='order-1 order-lg-1 d-flex align-items-center'>

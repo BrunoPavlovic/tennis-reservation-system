@@ -6,7 +6,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/register"/>} />
+        <Route path="/" element={<Navigate to="/login"/>} />
         <Route path="/register" element={<Registration />} />
         <Route path="/login" element={<Login />} />
       </Routes>

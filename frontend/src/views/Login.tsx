@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useLogin } from '../hooks/useLogin';
 import {
   MDBBtn,
@@ -36,6 +37,10 @@ const Login: React.FC = () => {
 
                 {error && <div className="text-danger">{error}</div>}
                 <MDBBtn className='mb-4' size='lg' type='submit'>Login</MDBBtn>
+                <p className="text-center">
+                  Don't have an account?{' '}
+                  <Link to="/register" className="text-primary" style={{ textDecoration: 'underline' }}>Register here</Link>
+                </p>
               </form>
             </MDBCol>
 
