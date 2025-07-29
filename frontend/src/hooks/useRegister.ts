@@ -20,7 +20,7 @@ export const useRegister = () => {
   const validate = () => {
     const errors: Record<string, string> = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
 
     if (!emailRegex.test(form.email)) errors.email = "Valid email is required (e.g. bpavlovic@foi.hr)";
     if (!passwordRegex.test(form.password)) errors.password = "Password ( 12 characters, 1 uppercase, 1 lowercase,1 number and 1 special character )";
