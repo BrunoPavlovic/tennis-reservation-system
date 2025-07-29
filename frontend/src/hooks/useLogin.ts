@@ -22,7 +22,7 @@ export const useLogin = () => {
             const token = response.data.token;
 
             localStorage.setItem('token', token);
-            navigate('/');
+            navigate('/home');
         } catch (err: any) {
             setError(err.response?.data || 'Login failed');
         }
