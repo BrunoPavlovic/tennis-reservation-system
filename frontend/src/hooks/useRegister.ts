@@ -13,8 +13,22 @@ export const useRegister = () => {
   });
 
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const [validationErrors, setValidationErrors] = useState<Record<string,string>>({});
   const [clubs, setClubs] = useState([]);
+  const navigate = useNavigate();
+
+  const validate = () => {
+    const errors: Record<string, string> = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/
+
+    if (!emailRegex.test(form.email)) errors.email = "Valid email is required (e.g. bpavlovic@foi.hr)";
+    if (!passwordRegex.test(form.password)) errors.password = "Password ( 12 characters, 1 uppercase, 1 lowercase,1 number and 1 special character )";
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
 
   useEffect(() => {
     const fetchClubs = async () => {
@@ -35,6 +49,11 @@ export const useRegister = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validate()) {
+      setError("Please fix the validation errors before submitting.");
+      return;
+    }
+
     try {
       await api.post("/auth/register", form);
       navigate("/login");
@@ -46,6 +65,7 @@ export const useRegister = () => {
   return {
     form,
     error,
+    validationErrors,
     clubs,
     handleChange,
     handleSubmit,
