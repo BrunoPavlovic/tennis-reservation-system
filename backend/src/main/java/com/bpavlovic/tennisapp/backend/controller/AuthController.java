@@ -1,5 +1,7 @@
 package com.bpavlovic.tennisapp.backend.controller;
 
+import com.bpavlovic.tennisapp.backend.dto.JwtResponse;
+import com.bpavlovic.tennisapp.backend.dto.UserLoginDto;
 import com.bpavlovic.tennisapp.backend.dto.UserRegistrationDto;
 import com.bpavlovic.tennisapp.backend.service.AuthService;
 import jakarta.validation.Valid;
@@ -7,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
@@ -20,6 +19,15 @@ import java.util.stream.Collectors;
 public class AuthController {
 
     private final AuthService authService;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto){
+        try {
+            return ResponseEntity.ok(authService.login(userLoginDto));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserRegistrationDto userRegistrationDto, BindingResult result){

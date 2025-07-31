@@ -9,7 +9,7 @@ public class ClubMapper {
     public ClubDto toDto(Club club){
         ClubDto clubDto = new ClubDto();
         clubDto.setName(club.getName());
-        clubDto.setCreditPrice(clubDto.getCreditPrice());
+        clubDto.setCreditPrice(club.getCreditPrice());
         return clubDto;
     }
 }
