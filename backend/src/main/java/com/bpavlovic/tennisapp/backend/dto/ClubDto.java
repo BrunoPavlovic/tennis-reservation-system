@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class ClubDto {
     private String name;
-    private String creditPrice;
+    private Double creditPrice;
 }
