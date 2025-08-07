@@ -14,4 +14,27 @@ public class UserService {
     public User getUserById(Integer userId){
         return userRepository.findById(userId).get();
     }
+
+    public Double getCreditAmount(String userEmail) {
+        User user = userRepository.findByEmail(userEmail);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        return user.getCreditAmount() != null ? user.getCreditAmount() : 0.0;
+    }
+
+    public Double updateCreditAmount(String userEmail, Double newCreditAmount) {
+        User user = userRepository.findByEmail(userEmail);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        
+        if (newCreditAmount < 0) {
+            throw new IllegalArgumentException("Credit amount cannot be negative");
+        }
+        
+        user.setCreditAmount(newCreditAmount);
+        User savedUser = userRepository.save(user);
+        return savedUser.getCreditAmount();
+    }
 }
