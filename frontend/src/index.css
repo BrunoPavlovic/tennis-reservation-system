@@ -1,3 +1,10 @@
+/* Global styles */
+html, body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background-image: url('./assets/court.png');
   background-size: cover; 
@@ -5,15 +12,84 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   position: relative;
+  min-height: 100vh;
 }
 
 body::before {
   content: "";
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background: rgba(255, 255, 255, 0.7);
   z-index: -1;
+}
+
+/* Home page specific styles */
+.home-carousel-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+}
+
+.home-carousel {
+  height: 100vh !important;
+}
+
+.home-carousel .carousel-inner {
+  height: 100vh !important;
+}
+
+.home-carousel .carousel-item {
+  height: 100vh !important;
+}
+
+.home-carousel .carousel-item img {
+  height: 100vh !important;
+  object-fit: cover;
+}
+
+.home-carousel .carousel-caption {
+  bottom: 20%;
+  z-index: 10;
+}
+
+/* Navbar styles */
+.navbar-desktop {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 1.5rem;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .home-carousel .carousel-caption h2 {
+    font-size: 2rem !important;
+  }
+  
+  .home-carousel .carousel-caption p {
+    font-size: 1rem !important;
+  }
+  
+  .navbar .text-success {
+    font-size: 0.8rem !important;
+    white-space: nowrap;
+  }
+  
+  .navbar .text-success .text-nowrap {
+    font-size: 0.8rem !important;
+  }
+}
+
+/* Desktop responsive styles */
+@media (min-width: 769px) {
+  .mobile-menu-toggle {
+    display: none !important;
+  }
 }
