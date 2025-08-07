@@ -5,6 +5,8 @@ import Home from "./views/Home";
 import AuthRedirect from "./components/AuthRedirect";
 import UnAuthRedirect from "./components/UnAuthRedirect";
 import SharedLayout from "./components/SharedLayout";
+import Reservation from "./views/Reservation";
+import Profile from "./views/Profile";
 
 const App: React.FC = () => {
   return (
@@ -16,6 +18,8 @@ const App: React.FC = () => {
         <Route element={<SharedLayout />}>
           <Route path="/" element={<Navigate to="/home"/>} />
           <Route path="/home" element={<UnAuthRedirect><Home /></UnAuthRedirect>} />
+          <Route path="/reservation" element={<UnAuthRedirect><Reservation /></UnAuthRedirect>} />
+          <Route path="/profile" element={<UnAuthRedirect><Profile/></UnAuthRedirect>} />
         </Route>
       </Routes>
     </Router>

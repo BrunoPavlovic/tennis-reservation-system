@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   MDBContainer,
   MDBNavbar,
@@ -20,6 +21,11 @@ const Navbar = () => {
   const { username, logout } = useAuth();
   const { credit, isLoading } = useCredit();
   const [showNav, setShowNav] = useState(false);
+  const location = useLocation();
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
 
   return (
     <MDBNavbar sticky fixed='top' light bgColor='light' className='shadow-3 mx-4 mt-3' style={{ borderRadius: '20px', backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.9)', zIndex: 1000 }}>
@@ -36,16 +42,16 @@ const Navbar = () => {
           <div className='d-flex justify-content-center'>
             <MDBNavbarNav className='d-flex flex-row gap-4'>
               <MDBNavbarItem>
-                <MDBNavbarLink active href='/home' className="fw-semibold">Home</MDBNavbarLink>
+                <MDBNavbarLink active={isActive('/home')} href='/home' className="fw-semibold">Home</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink href='/reservation' className="fw-semibold">Reservation</MDBNavbarLink>
+                <MDBNavbarLink active={isActive('/reservation')} href='/reservation' className="fw-semibold">Reservation</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink href='/profile' className="fw-semibold">Profile</MDBNavbarLink>
+                <MDBNavbarLink active={isActive('/profile')} href='/profile' className="fw-semibold">Profile</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
+                <MDBNavbarLink disabled active={isActive('/credit')} href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
               </MDBNavbarItem>
             </MDBNavbarNav>
           </div>
@@ -109,16 +115,16 @@ const Navbar = () => {
           <div className="px-4 pb-3">
             <MDBNavbarNav className='d-flex flex-column gap-2'>
               <MDBNavbarItem>
-                <MDBNavbarLink active href='/home' className="fw-semibold">Home</MDBNavbarLink>
+                <MDBNavbarLink active={isActive('/home')} href='/home' className="fw-semibold">Home</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink href='/reservation' className="fw-semibold">Reservation</MDBNavbarLink>
+                <MDBNavbarLink active={isActive('/reservation')} href='/reservation' className="fw-semibold">Reservation</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink href='/profile' className="fw-semibold">Profile</MDBNavbarLink>
+                <MDBNavbarLink active={isActive('/profile')} href='/profile' className="fw-semibold">Profile</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
+                <MDBNavbarLink  disabled active={isActive('/credit')} href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
               </MDBNavbarItem>
             </MDBNavbarNav>
           </div>
