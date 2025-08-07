@@ -4,15 +4,19 @@ import Login from "./views/Login";
 import Home from "./views/Home";
 import AuthRedirect from "./components/AuthRedirect";
 import UnAuthRedirect from "./components/UnAuthRedirect";
+import SharedLayout from "./components/SharedLayout";
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login"/>} />
         <Route path="/register" element={<AuthRedirect><Registration /></AuthRedirect>} />
         <Route path="/login" element={<AuthRedirect><Login /></AuthRedirect>} />
-        <Route path="/home" element={<UnAuthRedirect><Home /></UnAuthRedirect>} />
+
+        <Route element={<SharedLayout />}>
+          <Route path="/" element={<Navigate to="/home"/>} />
+          <Route path="/home" element={<UnAuthRedirect><Home /></UnAuthRedirect>} />
+        </Route>
       </Routes>
     </Router>
   );

@@ -17,3 +17,26 @@ body::before {
   background: rgba(255, 255, 255, 0.7);
   z-index: -1;
 }
+
+.navbar-grid {
+  display: grid !important;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  position: relative;
+}
+
+.navbar-grid > div:nth-child(2) {
+  justify-self: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.navbar-grid > div:first-child {
+  justify-self: start;
+}
+
+.navbar-grid > div:last-child {
+  justify-self: end;
+}
