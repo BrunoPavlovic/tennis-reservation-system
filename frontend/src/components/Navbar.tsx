@@ -75,8 +75,11 @@ const Navbar = () => {
           </MDBNavbarBrand>
 
           <div className='d-flex align-items-center gap-3'>
-            <span className='text-success fw-bold small'>
-              {isLoading ? '...' : `${credit.toFixed(2)} €`}
+            <span className='text-success fw-bold small d-flex align-items-center'>
+              <MDBIcon fas icon="money-bill-wave" className='me-1' />
+              <span className='text-nowrap'>
+                {isLoading ? '...' : `${credit.toFixed(2)}€`}
+              </span>
             </span>
 
             <MDBDropdown>
@@ -91,8 +94,8 @@ const Navbar = () => {
 
             <MDBNavbarToggler
               type="button"
-              data-target="#navbarTogglerDemo01"
-              aria-controls="navbarTogglerDemo01"
+              data-target="#navbarToggler"
+              aria-controls="navbarToggler"
               aria-expanded="false"
               aria-label="Toggle navigation"
               onClick={() => setShowNav(!showNav)}
