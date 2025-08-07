@@ -12,26 +12,22 @@ import {
   MDBDropdownItem,
   MDBIcon
 } from 'mdb-react-ui-kit';
+import { useAuth } from '../hooks/useAuth';
+import { useCredit } from '../hooks/useCredit';
 
 const Navbar = () => {
-  //get username and credit from localStorage or state management or backend
-  const username = 'bpavlovic@gmail.com';
-  const credit = 42.5;
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
-  };
+  const { username, logout } = useAuth();
+  const { credit, isLoading } = useCredit();
 
   return (
     <MDBNavbar sticky fixed='top' light bgColor='light' className='shadow-3 mx-4 mt-3' style={{ borderRadius: '20px', backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.9)' }}>
       <MDBContainer fluid className='navbar-grid px-0'>
-        
+
         <div className="d-flex align-items-center mx-4">
-            <MDBNavbarBrand href='/home' className='d-flex align-items-center'>
-                <img src='./src/assets/icon.png' alt='logo' width='32' height='32' className='me-2'/>
-                <span className="fw-bold">Match Point</span>
-            </MDBNavbarBrand>
+          <MDBNavbarBrand href='/home' className='d-flex align-items-center'>
+            <img src='./src/assets/icon.png' alt='logo' width='32' height='32' className='me-2' />
+            <span className="fw-bold">Match Point</span>
+          </MDBNavbarBrand>
         </div>
 
         <div className='d-flex justify-content-center'>
@@ -51,11 +47,10 @@ const Navbar = () => {
           </MDBNavbarNav>
         </div>
 
-
         <div className='d-flex align-items-center gap-4 mx-4'>
           <span className='text-success fw-bold'>
             <MDBIcon fas icon="money-bill-wave" className='me-2' />
-            {credit.toFixed(2)} €
+            {isLoading ? '...' : `${credit.toFixed(2)} €`}
           </span>
 
           <MDBDropdown>
@@ -64,7 +59,7 @@ const Navbar = () => {
               {username}
             </MDBDropdownToggle>
             <MDBDropdownMenu>
-              <MDBDropdownItem link onClick={handleLogout}>Logout</MDBDropdownItem>
+              <MDBDropdownItem link onClick={logout}>Logout</MDBDropdownItem>
             </MDBDropdownMenu>
           </MDBDropdown>
         </div>
