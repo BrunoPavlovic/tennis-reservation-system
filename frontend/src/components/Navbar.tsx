@@ -16,6 +16,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { useAuth } from '../hooks/useAuth';
 import { useCredit } from '../hooks/useCredit';
+import icon from '../assets/icon.png';
 
 const Navbar = () => {
   const { username, logout } = useAuth();
@@ -34,7 +35,7 @@ const Navbar = () => {
         <div className="d-none d-lg-flex justify-content-between align-items-center w-100 px-4">
           <div className="d-flex align-items-center">
             <MDBNavbarBrand href='/home' className='d-flex align-items-center'>
-              <img src='./src/assets/icon.png' alt='logo' width='32' height='32' className='me-2' />
+              <img src={icon} alt='logo' width='32' height='32' className='me-2' />
               <span className="fw-bold">Match Point</span>
             </MDBNavbarBrand>
           </div>
@@ -76,7 +77,7 @@ const Navbar = () => {
 
         <div className="d-lg-none d-flex align-items-center justify-content-between w-100 px-4">
           <MDBNavbarBrand href='/home' className='d-flex align-items-center'>
-            <img src='./src/assets/icon.png' alt='logo' width='25' height='25' className='me-2' />
+            <img src={icon} alt='logo' width='25' height='25' className='me-2' />
             <span className="fw-bold">Match Point</span>
           </MDBNavbarBrand>
 
