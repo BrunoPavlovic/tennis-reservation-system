@@ -52,7 +52,7 @@ const Navbar = () => {
                 <MDBNavbarLink active={isActive('/profile')} href='/profile' className="fw-semibold">Profile</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink disabled active={isActive('/credit')} href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
+                <MDBNavbarLink active={isActive('/credit')} href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
               </MDBNavbarItem>
             </MDBNavbarNav>
           </div>
@@ -125,7 +125,7 @@ const Navbar = () => {
                 <MDBNavbarLink active={isActive('/profile')} href='/profile' className="fw-semibold">Profile</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink  disabled active={isActive('/credit')} href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
+                <MDBNavbarLink active={isActive('/credit')} href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
               </MDBNavbarItem>
             </MDBNavbarNav>
           </div>
