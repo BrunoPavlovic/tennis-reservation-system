@@ -4,10 +4,12 @@ import Navbar from '../components/Navbar';
 
 const SharedLayout = () => {
   return (
-    <>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar />
-      <Outlet />
-    </>
+      <main style={{ flex: 1, paddingTop: '20px' }}>
+        <Outlet />
+      </main>
+    </div>
   );
 };
 

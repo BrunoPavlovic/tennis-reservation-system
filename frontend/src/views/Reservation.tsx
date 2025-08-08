@@ -10,7 +10,7 @@ import {
 
 const Reservation: React.FC = () => {
   return (
-    <MDBContainer className="d-flex justify-content-center align-items-center" style={{ minHeight: "calc(100vh - 120px)" }}>
+    <MDBContainer className="d-flex justify-content-center align-items-center" style={{ minHeight: "80vh" }}>
       <MDBCard className="shadow-5" style={{ borderRadius: "15px", maxWidth: "600px", width: "100%" }}>
         <MDBCardBody className="p-5">
           <div className="text-center mb-4">
