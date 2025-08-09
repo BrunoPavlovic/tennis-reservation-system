@@ -30,40 +30,16 @@ const Credit: React.FC = () => {
   const handlePayment = async () => {
     setIsLoading(true);
     try {
-      const response = await api.post('/payments/create-payment-intent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          amount: amount * 100 // cents
-        })
-      });
+      const response = await api.post('/payments/create-checkout-session',
+        { amount: amount * 100 }
+      );
 
-      if (response.status !== 200) {
-        throw new Error('Failed to create payment intent');
-      }
+      const { url } = response.data;
+      window.location.href = url;
 
-      const { clientSecret } = await response.data;
-      const stripe = await stripePromise;
-      if (!stripe) throw new Error('Stripe failed to load');
-
-      const { error } = await stripe.confirmPayment({
-        clientSecret,
-        confirmParams: {
-          //will be added later
-          return_url: `${window.location.origin}/payment-success?amount=${amount}`,
-        },
-      });
-
-      if (error) {
-        console.error('Payment failed:', error);
-        alert('Payment failed. Please try again.');
-      }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Payment error:', error);
-      alert('Payment failed. Please try again.');
+      alert('Failed to start payment. Try again.');
     } finally {
       setIsLoading(false);
     }

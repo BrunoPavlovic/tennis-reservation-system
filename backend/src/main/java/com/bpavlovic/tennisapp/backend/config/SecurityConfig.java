@@ -54,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/clubs/**").permitAll()
                         .requestMatchers("/api/users/**").hasRole("USER")
+                        .requestMatchers("/api/payments/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
