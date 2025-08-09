@@ -15,6 +15,14 @@ public class UserService {
         return userRepository.findById(userId).get();
     }
 
+    public User getUserByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
+
+    public User getUserByEmailForUpdate(String email){
+        return userRepository.findByEmailForUpdate(email);
+    }
+
     public Double getCreditAmount(String userEmail) {
         User user = userRepository.findByEmail(userEmail);
         if (user == null) {

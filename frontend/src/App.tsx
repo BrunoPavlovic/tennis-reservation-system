@@ -7,6 +7,9 @@ import UnAuthRedirect from "./components/UnAuthRedirect";
 import SharedLayout from "./components/SharedLayout";
 import Reservation from "./views/Reservation";
 import Profile from "./views/Profile";
+import Credit from "./views/Credit";
+import PaymentSuccess from "./views/PaymentSuccess";
+import PaymentCancelled from "./views/PaymentCancelled";
 
 const App: React.FC = () => {
   return (
@@ -20,6 +23,9 @@ const App: React.FC = () => {
           <Route path="/home" element={<UnAuthRedirect><Home /></UnAuthRedirect>} />
           <Route path="/reservation" element={<UnAuthRedirect><Reservation /></UnAuthRedirect>} />
           <Route path="/profile" element={<UnAuthRedirect><Profile/></UnAuthRedirect>} />
+          <Route path="/credit" element={<UnAuthRedirect><Credit /></UnAuthRedirect>} />
+          <Route path="/payment-success" element={<UnAuthRedirect><PaymentSuccess /></UnAuthRedirect>} />
+          <Route path="/payment-cancelled" element={<UnAuthRedirect><PaymentCancelled /></UnAuthRedirect>} />
         </Route>
       </Routes>
     </Router>

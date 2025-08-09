@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^2.4.0",
     "axios": "^1.11.0",
     "mdb-react-ui-kit": "^9.0.0",
     "react": "^18.2.0",
