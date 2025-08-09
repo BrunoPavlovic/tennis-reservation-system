@@ -54,6 +54,7 @@ public class PaymentService {
                                 )
                                 .build()
                 )
+                .setLocale(SessionCreateParams.Locale.EN)
                 .build();
 
         Session session = Session.create(params);
