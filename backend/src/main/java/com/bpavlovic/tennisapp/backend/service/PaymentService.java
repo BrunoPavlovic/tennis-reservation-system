@@ -1,8 +1,10 @@
 package com.bpavlovic.tennisapp.backend.service;
 
+import com.bpavlovic.tennisapp.backend.dto.CreditTransactionDto;
 import com.bpavlovic.tennisapp.backend.dto.PaymentIntentRequest;
 import com.bpavlovic.tennisapp.backend.dto.PaymentVerificationRequest;
 import com.bpavlovic.tennisapp.backend.dto.PaymentVerificationResponse;
+import com.bpavlovic.tennisapp.backend.model.User;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
@@ -29,6 +31,7 @@ public class PaymentService {
     private String baseUrl;
 
     private final UserService userService;
+    private final CreditTransactionService creditTransactionService;
 
     public String createCheckoutSession(PaymentIntentRequest paymentIntentRequest) throws StripeException {
         Stripe.apiKey = stripeSecretKey;
@@ -69,27 +72,21 @@ public class PaymentService {
 
         if ("succeeded".equals(paymentIntent.getStatus())) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String username = authentication.getName();
+            String email = authentication.getName();
 
-            String creditedFlag = paymentIntent.getMetadata().get("credited");
-            if ("true".equals(creditedFlag)) {
-                double currentCredit = userService.getCreditAmount(username);
+            String paymentIntentId = paymentIntent.getId();
+            if (creditTransactionService.existsByPaymentIntentId(paymentIntentId)) {
+                double currentCredit = userService.getCreditAmount(email);
                 return new PaymentVerificationResponse(currentCredit, paymentIntent.getAmountReceived() / 100.0, true, "Payment already processed");
             }
 
             double amount = paymentIntent.getAmountReceived() / 100.0;
-            double currentCredit = userService.getCreditAmount(username);
+            double currentCredit = userService.getCreditAmount(email);
             double newCredit = currentCredit + amount;
-            userService.updateCreditAmount(username, newCredit);
+            userService.updateCreditAmount(email, newCredit);
 
-            //update paymentIntent so it won't be executed more than once
-            Map<String, String> metadata = new HashMap<>(paymentIntent.getMetadata());
-            metadata.put("credited", "true");
-
-            PaymentIntentUpdateParams updateParams = PaymentIntentUpdateParams.builder()
-                    .putAllMetadata(metadata)
-                    .build();
-            paymentIntent.update(updateParams);
+            User user = userService.getUserByEmail(email);
+            creditTransactionService.savePayment(new CreditTransactionDto(user, amount, "PAYMENT"), paymentIntentId);
 
             return new PaymentVerificationResponse(newCredit, amount, true, "Payment verified successfully");
         } else {

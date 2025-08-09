@@ -20,6 +20,10 @@ public class CreditTransaction {
     private User user;
 
     private Double amount;
+
     private String type;
+
+    private String paymentIntentId;
+
     private Timestamp timestamp;
 }
