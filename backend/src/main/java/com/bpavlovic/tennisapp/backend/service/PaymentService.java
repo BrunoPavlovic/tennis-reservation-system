@@ -11,6 +11,7 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.PaymentIntentUpdateParams;
 import com.stripe.param.checkout.SessionCreateParams;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -64,17 +65,20 @@ public class PaymentService {
         return session.getUrl();
     }
 
+    @Transactional
     public PaymentVerificationResponse verifyPayment(PaymentVerificationRequest paymentVerificationRequest) throws StripeException {
         Stripe.apiKey = stripeSecretKey;
 
         Session session = Session.retrieve(paymentVerificationRequest.getSessionId());
         PaymentIntent paymentIntent = PaymentIntent.retrieve(session.getPaymentIntent());
 
-        if ("succeeded".equals(paymentIntent.getStatus())) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String email = authentication.getName();
 
+        if ("succeeded".equals(paymentIntent.getStatus())) {;
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
             String paymentIntentId = paymentIntent.getId();
+
+            User user = userService.getUserByEmailForUpdate(email);
+
             if (creditTransactionService.existsByPaymentIntentId(paymentIntentId)) {
                 double currentCredit = userService.getCreditAmount(email);
                 return new PaymentVerificationResponse(currentCredit, paymentIntent.getAmountReceived() / 100.0, true, "Payment already processed");
@@ -85,7 +89,6 @@ public class PaymentService {
             double newCredit = currentCredit + amount;
             userService.updateCreditAmount(email, newCredit);
 
-            User user = userService.getUserByEmail(email);
             creditTransactionService.savePayment(new CreditTransactionDto(user, amount, "PAYMENT"), paymentIntentId);
 
             return new PaymentVerificationResponse(newCredit, amount, true, "Payment verified successfully");
