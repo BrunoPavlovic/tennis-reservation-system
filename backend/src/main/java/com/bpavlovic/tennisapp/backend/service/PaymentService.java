@@ -7,12 +7,16 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
+import com.stripe.param.PaymentIntentUpdateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -66,12 +70,25 @@ public class PaymentService {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
 
-            long amountReceived = paymentIntent.getAmountReceived();
-            double amount = amountReceived / 100.0;
+            String creditedFlag = paymentIntent.getMetadata().get("credited");
+            if ("true".equals(creditedFlag)) {
+                double currentCredit = userService.getCreditAmount(username);
+                return new PaymentVerificationResponse(currentCredit, paymentIntent.getAmountReceived() / 100.0, true, "Payment already processed");
+            }
 
+            double amount = paymentIntent.getAmountReceived() / 100.0;
             double currentCredit = userService.getCreditAmount(username);
             double newCredit = currentCredit + amount;
             userService.updateCreditAmount(username, newCredit);
+
+            //update paymentIntent so it won't be executed more than once
+            Map<String, String> metadata = new HashMap<>(paymentIntent.getMetadata());
+            metadata.put("credited", "true");
+
+            PaymentIntentUpdateParams updateParams = PaymentIntentUpdateParams.builder()
+                    .putAllMetadata(metadata)
+                    .build();
+            paymentIntent.update(updateParams);
 
             return new PaymentVerificationResponse(newCredit, amount, true, "Payment verified successfully");
         } else {
