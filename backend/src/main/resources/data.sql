@@ -16,3 +16,11 @@ INSERT INTO membership (membership_id, user_id, club_id) VALUES
 (2000, 2000, 100),  -- Ana u TK Požega
 (3000, 3000, 200),  -- Petra u Dalmacija TC
 (4000, 4000, 100);  -- Marko (admin) također u TK Požega
+
+-- Tereni
+INSERT INTO courts (name, club_id) VALUES
+("Teren 1", 100),
+("Teren Ivanišević", 100),
+("Teren Australian OPEN", 100),
+("Teren Rolland Garros", 200),
+("Teren Test", 200);

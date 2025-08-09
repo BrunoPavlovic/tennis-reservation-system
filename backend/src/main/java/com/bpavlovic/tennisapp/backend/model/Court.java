@@ -13,7 +13,7 @@ public class Court {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long courtId;
 
-    private String courtName;
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "club_id")
