@@ -18,14 +18,29 @@ const Credit: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleIncrement = () => {
-    setAmount(prev => prev + 10);
+    if (amount < 10){
+      setAmount(prev => prev + 1);
+    } else {
+      setAmount(prev => prev + 10);
+    }
   };
 
   const handleDecrement = () => {
     if (amount > 10) {
       setAmount(prev => prev - 10);
+    } else if (amount <= 10) {
+        setAmount(prev => prev - 1);
     }
   };
+
+  const handleManualAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
+    if (!isNaN(value) && value > 0 && value <= 100) {
+      setAmount(value);
+    } else {
+      setAmount(10);
+    }
+  }
 
   const handlePayment = async () => {
     setIsLoading(true);
@@ -56,12 +71,20 @@ const Credit: React.FC = () => {
               <p className="text-muted mb-4">Choose how much credit you want to add</p>
 
               <div className="d-flex justify-content-center align-items-center gap-4 mb-4">
-                <MDBBtn onClick={handleDecrement} disabled={amount <= 10} >
+                <MDBBtn onClick={handleDecrement} disabled={amount <= 1} >
                   <MDBIcon fas icon="minus" />
                 </MDBBtn>
 
                 <div className="text-center">
-                  <div className="h1 fw-bold text-primary mb-0">{amount}€</div>
+                  <div className="h1 fw-bold text-primary mb-0">
+                    <input type="text" value={amount} onChange={handleManualAmountChange}
+                      className="h1 fw-bold text-primary text-center border-0 mb-0"
+                      style={{
+                        width: "80px",
+                        outline: "none",
+                        background: "transparent",
+                      }} 
+                    />€</div>
                   <small className="text-muted">EUR</small>
                 </div>
 
