@@ -11,6 +11,7 @@ import {
   MDBSpinner
 } from 'mdb-react-ui-kit';
 import api from '../services/axios';
+import { useCredit } from '../hooks/useCredit';
 
 const PaymentSuccess: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -21,6 +22,7 @@ const PaymentSuccess: React.FC = () => {
   const [amount, setAmount] = useState<number | null>(null);
 
   const sessionId = searchParams.get('session_id');
+  const { updateCredit } = useCredit();
 
   useEffect(() => {
     const verifyPayment = async () => {
@@ -41,8 +43,8 @@ const PaymentSuccess: React.FC = () => {
 
         const { newCredit, amountFromStripe } = await response.data;
         setAmount(amountFromStripe);
-        localStorage.setItem('userCredit', newCredit.toString());
-        
+        updateCredit(newCredit);
+
         setIsSuccess(true);
       } catch (error) {
         console.error('Verification error:', error);
@@ -103,11 +105,11 @@ const PaymentSuccess: React.FC = () => {
           <MDBCardTitle className="fw-bold h4 text-success">Payment Successful!</MDBCardTitle>
           <MDBCardText className="text-muted mb-4">
             Your payment of <strong>{amount}€</strong> has been processed successfully.<br />
-            Your credit has been updated and is ready to use.
+            Click Continue to finish the payment.
           </MDBCardText>
           <MDBBtn color="success" size="lg" onClick={handleContinue}>
             <MDBIcon fas icon="home" className="me-2" />
-            Continue to Home
+            Continue
           </MDBBtn>
         </MDBCardBody>
       </MDBCard>
