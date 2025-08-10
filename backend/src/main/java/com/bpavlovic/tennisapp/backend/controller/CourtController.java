@@ -1,12 +1,12 @@
 package com.bpavlovic.tennisapp.backend.controller;
 
-import com.bpavlovic.tennisapp.backend.model.Court;
+import com.bpavlovic.tennisapp.backend.dto.CourtDto;
 import com.bpavlovic.tennisapp.backend.service.CourtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,10 +18,10 @@ public class CourtController {
 
     private final CourtService courtService;
 
-    @PostMapping
-    public ResponseEntity<?> getCourtsByClub (@RequestBody String club){
+    @GetMapping
+    public ResponseEntity<?> getCourtsByClub (@RequestParam String club){
         try {
-            List<Court> courts = courtService.getCourtsByClub(club);
+            List<CourtDto> courts = courtService.getCourtsByClub(club);
             return ResponseEntity.ok(courts);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
