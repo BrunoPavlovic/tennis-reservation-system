@@ -149,7 +149,7 @@ const Reservation: React.FC = () => {
         endTime: selectedSlot.endTime
       };
 
-      const success = await createReservation(reservationData);
+             const success = await createReservation(reservationData, credit);
       if (success) {
         await Promise.all([loadSchedule(), refreshCredit()]);
         setShowConfirmation(false);

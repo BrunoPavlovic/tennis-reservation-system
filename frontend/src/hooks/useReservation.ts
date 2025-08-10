@@ -51,11 +51,16 @@ export const useReservation = () => {
         }
     };
 
-    const createReservation = async (reservationData: CreateReservationDto): Promise<boolean> => {
+    const createReservation = async (reservationData: CreateReservationDto, currentCredit: number): Promise<boolean> => {
         try {
             setIsLoading(true);
-            await api.post('/reservations', reservationData);
-            return true;
+            const response = await api.post('/reservations', reservationData);
+            if (response.status === 200) {
+                const newCreditAmount = currentCredit - creditCost;
+                await api.put('/users/credit', { credit: newCreditAmount });
+                return true;
+            }
+            return false;
         } catch (error) {
             console.error('Error creating reservation:', error);
             return false;
@@ -97,7 +102,7 @@ export const useReservation = () => {
         const diff = monday.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
         monday.setDate(diff);
 
-        const reservationPromises = [];
+        const reservationPromises: Promise<Reservation[]>[] = [];
         for (let i = 0; i < 7; i++) {
             const currentDate = new Date(monday);
             currentDate.setDate(monday.getDate() + i);
@@ -105,7 +110,7 @@ export const useReservation = () => {
             reservationPromises.push(fetchReservations(dateString, club, court));
         }
 
-        const weekReservations = await Promise.all(reservationPromises);
+        const weekReservations: Reservation[][] = await Promise.all(reservationPromises);
 
         // Create schedule for each day
         for (let i = 0; i < 7; i++) {
@@ -114,7 +119,7 @@ export const useReservation = () => {
             const dateString = currentDate.toISOString().split('T')[0];
 
             const timeSlots = generateTimeSlots();
-            const dayReservations = weekReservations[i];
+            const dayReservations = weekReservations[i] || [];
 
             // Mark occupied slots
             dayReservations.forEach((reservation: Reservation) => {

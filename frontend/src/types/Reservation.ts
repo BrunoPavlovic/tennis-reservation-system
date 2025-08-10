@@ -10,8 +10,7 @@ export interface Club {
 
 export interface Reservation {
   reservationId: number;
-  user: any;
-  court: Court;
+  courtName: string;
   date: string;
   startTime: string;
   endTime: string;
