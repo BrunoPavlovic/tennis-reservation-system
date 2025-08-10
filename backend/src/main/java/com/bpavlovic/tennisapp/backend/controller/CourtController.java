@@ -19,9 +19,9 @@ public class CourtController {
     private final CourtService courtService;
 
     @GetMapping
-    public ResponseEntity<?> getCourtsByClub (@RequestBody String clubName){
+    public ResponseEntity<?> getCourtsByClub (@RequestBody String club){
         try {
-            List<Court> courts = courtService.getCourtsByClub(clubName);
+            List<Court> courts = courtService.getCourtsByClub(club);
             return ResponseEntity.ok(courts);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

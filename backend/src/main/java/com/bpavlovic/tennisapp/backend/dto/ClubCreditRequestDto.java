@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class ClubCreditRequestDto {
-    private String clubName;
+    private String club;
 }

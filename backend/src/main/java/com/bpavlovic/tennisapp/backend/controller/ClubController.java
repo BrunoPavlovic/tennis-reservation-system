@@ -28,7 +28,7 @@ public class ClubController {
     @GetMapping("/price")
     public ResponseEntity<?> getCreditPriceForClub(ClubCreditRequestDto clubCreditRequestDto){
         try {
-            return new ResponseEntity<>( clubService.getClubByName(clubCreditRequestDto.getClubName()).getCreditPrice(), HttpStatus.OK);
+            return new ResponseEntity<>( clubService.getClubByName(clubCreditRequestDto.getClub()).getCreditPrice(), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
