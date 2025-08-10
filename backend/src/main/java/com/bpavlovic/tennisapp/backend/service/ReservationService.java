@@ -18,6 +18,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final CourtService courtService;
     private final ReservationMapper reservationMapper;
+    private final CreditTransactionService creditTransactionService;
 
     public List<Reservation> getReservationsByDateAndCourt(ReservationRequestDto reservationRequestDto){
         try {
@@ -32,6 +33,8 @@ public class ReservationService {
         try {
             Reservation reservation = reservationMapper.toEntity(createReservationDto);
             reservationRepository.save(reservation);
+
+            creditTransactionService.saveReservation(reservation);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
