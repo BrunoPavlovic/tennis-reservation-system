@@ -149,9 +149,13 @@ const Reservation: React.FC = () => {
         endTime: selectedSlot.endTime
       };
 
-             const success = await createReservation(reservationData, credit);
+      const success = await createReservation(reservationData, credit);
       if (success) {
-        await Promise.all([loadSchedule(), refreshCredit()]);
+        await loadSchedule();
+
+        const newCreditAmount = credit - creditCost;
+        (window as any).updateUserCredit?.(newCreditAmount);
+        await (window as any).refreshUserCredit?.(); 
         setShowConfirmation(false);
         setSelectedSlot(null);
       } else {
@@ -193,8 +197,8 @@ const Reservation: React.FC = () => {
     <div
       key={`${date}-${slot.startTime}`}
       className={`time-slot p-2 text-center border rounded mb-1 cursor-pointer ${slot.isOccupied
-          ? 'bg-danger text-white'
-          : 'bg-success text-white hover-bg-success-dark'
+        ? 'bg-danger text-white'
+        : 'bg-success text-white hover-bg-success-dark'
         }`}
       style={{
         minHeight: '40px',
@@ -206,13 +210,13 @@ const Reservation: React.FC = () => {
       <small>
         {slot.startTime} - {slot.endTime}
       </small>
-      {slot.isOccupied && (
-        <div className="mt-1">
-          <MDBBadge color="light" className="text-dark">
-            <small>Booked</small>
-          </MDBBadge>
-        </div>
-      )}
+             {slot.isOccupied && (
+         <div className="mt-1">
+           <MDBBadge color="light" className="text-dark">
+             <small>{slot.reservation?.userFirstName} {slot.reservation?.userLastName}</small>
+           </MDBBadge>
+         </div>
+       )}
     </div>
   );
 

@@ -16,6 +16,8 @@ export interface Reservation {
   endTime: string;
   creditCost: number;
   createdAt: string;
+  userFirstName: string;
+  userLastName: string;
 }
 
 export interface CreateReservationDto {

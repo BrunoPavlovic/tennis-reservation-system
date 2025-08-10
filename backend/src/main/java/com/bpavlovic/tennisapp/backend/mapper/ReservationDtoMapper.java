@@ -21,6 +21,8 @@ public class ReservationDtoMapper {
         dto.setEndTime(reservation.getEndTime().format(TIME_FORMATTER));
         dto.setCreditCost(reservation.getCreditCost());
         dto.setCreatedAt(reservation.getCreatedAt().toString());
+        dto.setUserFirstName(reservation.getUser().getFirstName());
+        dto.setUserLastName(reservation.getUser().getLastName());
         return dto;
     }
 }

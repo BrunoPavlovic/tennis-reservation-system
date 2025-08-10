@@ -11,4 +11,6 @@ public class ReservationDto {
     private String endTime;
     private Double creditCost;
     private String createdAt;
+    private String userFirstName;
+    private String userLastName;
 }

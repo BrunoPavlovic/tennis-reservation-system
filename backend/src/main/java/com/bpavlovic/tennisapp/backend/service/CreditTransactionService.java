@@ -22,6 +22,7 @@ public class CreditTransactionService {
 
     public void saveReservation(Reservation reservation){
         CreditTransaction creditTransaction = creditTransactionMapper.toEntity(reservation);
+        creditTransactionRepository.save(creditTransaction);
     }
 
     public boolean existsByPaymentIntentId(String paymentIntentId){
