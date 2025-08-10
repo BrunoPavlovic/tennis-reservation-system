@@ -31,7 +31,11 @@ const Reservation: React.FC = () => {
   const { credit, refreshCredit } = useCredit();
 
   const [weekSchedule, setWeekSchedule] = useState<DaySchedule[]>([]);
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [currentDate, setCurrentDate] = useState<Date>(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
+  });
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [selectedSlot, setSelectedSlot] = useState<{
     date: string;
@@ -86,11 +90,16 @@ const Reservation: React.FC = () => {
 
     if (direction === 'prev') {
       newDate.setDate(newDate.getDate() - 7);
+      
+      // Check if the end of the week (6 days after start) is still in the future
+      const weekEndDate = new Date(newDate);
+      weekEndDate.setDate(newDate.getDate() + 6);
+      
       const today = new Date();
-      const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-      const newDateStart = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate());
-
-      if (newDateStart < todayStart) return;
+      today.setHours(0, 0, 0, 0);
+      weekEndDate.setHours(0, 0, 0, 0);
+      
+      if (weekEndDate < today) return;
     } else {
       newDate.setDate(newDate.getDate() + 7);
       const today = new Date();
@@ -108,10 +117,11 @@ const Reservation: React.FC = () => {
     if (direction === 'prev') {
       newDate.setDate(newDate.getDate() - 1);
       const today = new Date();
-      const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      today.setHours(0, 0, 0, 0);
       const newDateStart = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate());
+      newDateStart.setHours(0, 0, 0, 0);
 
-      if (newDateStart < todayStart) return;
+      if (newDateStart < today) return;
     } else {
       newDate.setDate(newDate.getDate() + 1);
       const today = new Date();
@@ -179,46 +189,63 @@ const Reservation: React.FC = () => {
   };
 
   const getCurrentWeekRange = () => {
-    const monday = new Date(currentDate);
-    const dayOfWeek = monday.getDay();
-    const diff = monday.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-    monday.setDate(diff);
-
-    const sunday = new Date(monday);
-    sunday.setDate(monday.getDate() + 6);
+    const startDate = new Date(currentDate);
+    
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 6);
 
     return {
-      start: monday.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      end: sunday.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      start: startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      end: endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     };
   };
 
-  const renderTimeSlot = (slot: TimeSlot, date: string, dayName: string) => (
-    <div
-      key={`${date}-${slot.startTime}`}
-      className={`time-slot p-2 text-center border rounded mb-1 cursor-pointer ${slot.isOccupied
-        ? 'bg-danger text-white'
-        : 'bg-success text-white hover-bg-success-dark'
-        }`}
-      style={{
-        minHeight: '40px',
-        cursor: slot.isOccupied ? 'not-allowed' : 'pointer',
-        opacity: slot.isOccupied ? 0.7 : 1
-      }}
-      onClick={() => handleSlotClick(slot, date, dayName)}
-    >
-      <small>
-        {slot.startTime} - {slot.endTime}
-      </small>
-      {slot.isOccupied && (
-        <div className="mt-1">
-          <MDBBadge color="light" className="text-dark">
-            <small>{slot.reservation?.userFirstName} {slot.reservation?.userLastName}</small>
-          </MDBBadge>
-        </div>
-      )}
-    </div>
-  );
+  const renderTimeSlot = (slot: TimeSlot, date: string, dayName: string) => {
+    const slotDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    slotDate.setHours(0, 0, 0, 0);
+
+    const isPastDate = slotDate < today;
+    const isPastTime = slotDate.getTime() === today.getTime() &&
+      new Date().getTime() > new Date(`${date}T${slot.startTime}`).getTime();
+    const isDisabled = isPastDate || isPastTime;
+
+    return (
+      <div
+        key={`${date}-${slot.startTime}`}
+        className={`time-slot p-2 text-center border rounded mb-1 ${isDisabled
+            ? 'bg-secondary text-white cursor-not-allowed'
+            : slot.isOccupied
+              ? 'bg-danger text-white cursor-not-allowed'
+              : 'bg-success text-white hover-bg-success-dark cursor-pointer'
+          }`}
+        style={{
+          minHeight: '40px',
+          opacity: isDisabled ? 0.5 : slot.isOccupied ? 0.7 : 1
+        }}
+        onClick={() => !isDisabled && !slot.isOccupied && handleSlotClick(slot, date, dayName)}
+      >
+        <small>
+          {slot.startTime} - {slot.endTime}
+        </small>
+        {slot.isOccupied && (
+          <div className="mt-1">
+            <MDBBadge color="light" className="text-dark">
+              <small>{slot.reservation?.userFirstName} {slot.reservation?.userLastName}</small>
+            </MDBBadge>
+          </div>
+        )}
+        {isDisabled && !slot.isOccupied && (
+          <div className="mt-1">
+            <MDBBadge color="dark" className="text-white">
+              <small>Past</small>
+            </MDBBadge>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const renderWeeklyView = () => (
     <div className="weekly-view">
@@ -361,6 +388,30 @@ const Reservation: React.FC = () => {
                     ))
                   )}
                 </select>
+              </div>
+
+              {/* Date Picker */}
+              <div className="mb-4">
+                <label className="form-label">Select Date:</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  value={currentDate.toISOString().split('T')[0]}
+                  onChange={(e) => {
+                    const selectedDate = new Date(e.target.value);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    if (selectedDate >= today) {
+                      setCurrentDate(selectedDate);
+                    }
+                  }}
+                  min={new Date().toISOString().split('T')[0]}
+                  max={new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
+                />
+                <small className="text-muted">
+                  You can select any date from today up to 4 weeks in the future
+                </small>
               </div>
 
               {/* Error Display */}

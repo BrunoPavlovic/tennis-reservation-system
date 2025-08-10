@@ -95,27 +95,21 @@ export const useReservation = () => {
 
     const generateWeekSchedule = async (startDate: Date, club: string, court: string): Promise<DaySchedule[]> => {
         const weekSchedule: DaySchedule[] = [];
-        const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-        const monday = new Date(startDate);
-        const dayOfWeek = monday.getDay();
-        const diff = monday.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-        monday.setDate(diff);
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const startDateObj = new Date(startDate);
 
         const reservationPromises: Promise<Reservation[]>[] = [];
         for (let i = 0; i < 7; i++) {
-            const currentDate = new Date(monday);
-            currentDate.setDate(monday.getDate() + i);
+            const currentDate = new Date(startDateObj);
+            currentDate.setDate(startDateObj.getDate() + i);
             const dateString = currentDate.toISOString().split('T')[0];
             reservationPromises.push(fetchReservations(dateString, club, court));
         }
 
         const weekReservations: Reservation[][] = await Promise.all(reservationPromises);
-
-        // Create schedule for each day
         for (let i = 0; i < 7; i++) {
-            const currentDate = new Date(monday);
-            currentDate.setDate(monday.getDate() + i);
+            const currentDate = new Date(startDateObj);
+            currentDate.setDate(startDateObj.getDate() + i);
             const dateString = currentDate.toISOString().split('T')[0];
 
             const timeSlots = generateTimeSlots();
@@ -130,9 +124,11 @@ export const useReservation = () => {
                 }
             });
 
+            // Get the actual day name for this date
+            const dayName = dayNames[currentDate.getDay()];
             weekSchedule.push({
                 date: dateString,
-                dayName: dayNames[i],
+                dayName: dayName,
                 timeSlots
             });
         }
