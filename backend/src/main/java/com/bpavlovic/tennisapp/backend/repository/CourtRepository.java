@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface CourtRepository extends JpaRepository<Court, Long> {
-    List<Court> findCourtsByClub(Club club);
-    Court findCourtByClubAndName(Club club,String courtName);
+    List<Court> findByClub(Club club);
+    Court findByClubAndName(Club club, String courtName);
 }

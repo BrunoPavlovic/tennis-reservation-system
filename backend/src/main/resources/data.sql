@@ -7,7 +7,7 @@ INSERT INTO users (user_id, first_name, last_name, email, password, role, credit
 
 -- Klubovi
 INSERT INTO club (club_id, name, credit_price, created_at) VALUES
-(100, 'Teniski Klub Požega', 25.0, '2025-07-15 10:00:00'),
+(100, 'Teniski Klub Pozega', 25.0, '2025-07-15 10:00:00'),
 (200, 'Dalmacija Tennis Center', 18.0, '2025-07-18 12:30:00');
 
 -- Članarine

@@ -27,6 +27,13 @@ public class ClubService {
     }
 
     public Club getClubByName(String clubName){
-        return clubRepository.findByName(clubName);
+        System.out.println("Looking for club with name: " + clubName);
+        Club club = clubRepository.findByName(clubName);
+        if (club != null) {
+            System.out.println("Found club: " + club.getName() + " (ID: " + club.getClubId() + ")");
+        } else {
+            System.out.println("Club not found!");
+        }
+        return club;
     }
 }

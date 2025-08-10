@@ -80,12 +80,12 @@ public class PaymentService {
             User user = userService.getUserByEmailForUpdate(email);
 
             if (creditTransactionService.existsByPaymentIntentId(paymentIntentId)) {
-                double currentCredit = userService.getCreditAmount(email);
+                double currentCredit = userService.getUser().getCredit();
                 return new PaymentVerificationResponse(currentCredit, paymentIntent.getAmountReceived() / 100.0, true, "Payment already processed");
             }
 
             double amount = paymentIntent.getAmountReceived() / 100.0;
-            double currentCredit = userService.getCreditAmount(email);
+            double currentCredit = userService.getUser().getCredit();
             double newCredit = currentCredit + amount;
             userService.updateCreditAmount(email, newCredit);
 
