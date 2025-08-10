@@ -1,9 +1,9 @@
 -- Korisnici
 INSERT INTO users (user_id, first_name, last_name, email, password, role, credit_amount, created_at) VALUES
-(1000, 'Ivan', 'Horvat', 'ivan.horvat@example.com', '$2a$10$yYVQo9mC.QB.Hh4/64bIDu.8vEZa8EvzK1OyJqV7eTxQLu2aXHkwe', 'USER', 120.0, '2025-07-21 09:00:00'),
-(2000, 'Ana', 'Marić', 'ana.maric@example.com', '$2a$10$qW2ZrZKieHp8RcIfUuNd8uFYO/9iTfN2ocQOEPQ2SlZIlRFeuOMTe', 'USER', 300.0, '2025-07-20 15:30:00'),
-(3000, 'Petra', 'Kovač', 'petra.kovac@example.com', '$2a$10$n7bR0CeRzDcbtlAbnxrbOeScdOQFfAf7khMEYe9.E2ZAP/WzKnNLu', 'USER', 85.0, '2025-07-19 08:45:00'),
-(4000, 'Admin', 'Admin', 'admin@example.com', '$2a$10$z8YOZQfL/xfpDJRyN/XRbe5mDuUOjIvXZLxkqapZlybIurXpOC/Me', 'ADMIN', 500.0, '2025-07-18 12:00:00');
+(1000, 'Ivan', 'Horvat', 'ivan.horvat@example.com', '$2a$10$8OfoYMi.3OTvK0LMFPhBDehrphQ0LgNdrwl5vRAEQf7LDK7G0ND2m', 'USER', 120.0, '2025-07-21 09:00:00'),
+(2000, 'Ana', 'Marić', 'ana.maric@example.com', '$2a$10$8OfoYMi.3OTvK0LMFPhBDehrphQ0LgNdrwl5vRAEQf7LDK7G0ND2m', 'USER', 300.0, '2025-07-20 15:30:00'),
+(3000, 'Petra', 'Kovač', 'petra.kovac@example.com', '$2a$10$8OfoYMi.3OTvK0LMFPhBDehrphQ0LgNdrwl5vRAEQf7LDK7G0ND2m', 'USER', 85.0, '2025-07-19 08:45:00'),
+(4000, 'Admin', 'Admin', 'admin@example.com', '$2a$10$8OfoYMi.3OTvK0LMFPhBDehrphQ0LgNdrwl5vRAEQf7LDK7G0ND2m', 'ADMIN', 500.0, '2025-07-18 12:00:00');
 
 -- Klubovi
 INSERT INTO club (club_id, name, credit_price, created_at) VALUES
