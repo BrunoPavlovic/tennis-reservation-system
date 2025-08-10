@@ -3,9 +3,9 @@ package com.bpavlovic.tennisapp.backend.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @Entity
@@ -24,8 +24,8 @@ public class Reservation {
     private Court court;
 
     private LocalDate date;
-    private Time startTime;
-    private Time endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Double creditCost;
     private Timestamp createdAt;
 }
