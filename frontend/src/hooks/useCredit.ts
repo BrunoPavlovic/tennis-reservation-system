@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../services/axios';
+import { User } from '../types/User';
 
 export const useCredit = () => {
     const [credit, setCredit] = useState<number>(0);
@@ -11,10 +12,11 @@ export const useCredit = () => {
             const token = localStorage.getItem('token');
             if (!token) return;
 
-            const response = await api.get('/user/credit');
+            const response = await api.get('/users/me');
             const creditAmount = response.data.credit || 0;
             setCredit(creditAmount);
             localStorage.setItem('userCredit', creditAmount.toString());
+            localStorage.setItem('userClub', response.data.club);
         } catch (error) {
             console.error('Error fetching credit:', error);
         } finally {
