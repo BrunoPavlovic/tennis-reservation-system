@@ -155,7 +155,7 @@ const Reservation: React.FC = () => {
 
         const newCreditAmount = credit - creditCost;
         (window as any).updateUserCredit?.(newCreditAmount);
-        await (window as any).refreshUserCredit?.(); 
+        await (window as any).refreshUserCredit?.();
         setShowConfirmation(false);
         setSelectedSlot(null);
       } else {
@@ -210,13 +210,13 @@ const Reservation: React.FC = () => {
       <small>
         {slot.startTime} - {slot.endTime}
       </small>
-             {slot.isOccupied && (
-         <div className="mt-1">
-           <MDBBadge color="light" className="text-dark">
-             <small>{slot.reservation?.userFirstName} {slot.reservation?.userLastName}</small>
-           </MDBBadge>
-         </div>
-       )}
+      {slot.isOccupied && (
+        <div className="mt-1">
+          <MDBBadge color="light" className="text-dark">
+            <small>{slot.reservation?.userFirstName} {slot.reservation?.userLastName}</small>
+          </MDBBadge>
+        </div>
+      )}
     </div>
   );
 
@@ -321,7 +321,7 @@ const Reservation: React.FC = () => {
 
         <div className="row">
           {currentDay.timeSlots.map((slot, index) => (
-            <div key={index} className="col-6 col-md-4 col-lg-3 mb-2">
+            <div key={index} className="col-12 col-md-4 col-lg-3 mb-2">
               {renderTimeSlot(slot, currentDay.date, currentDay.dayName)}
             </div>
           ))}
