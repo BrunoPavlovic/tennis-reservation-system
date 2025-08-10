@@ -93,3 +93,104 @@ body::before {
     display: none !important;
   }
 }
+
+/* Reservation Styles */
+.time-slot {
+  transition: all 0.2s ease;
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.time-slot:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.time-slot.bg-success:hover {
+  background-color: #198754 !important;
+}
+
+.time-slot.bg-danger {
+  cursor: not-allowed !important;
+}
+
+.time-slot.bg-danger:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.weekly-view .table th {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+  font-weight: 600;
+}
+
+.weekly-view .table td {
+  border-color: #dee2e6;
+  vertical-align: middle;
+}
+
+.daily-view .time-slot {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .daily-view .col-6 {
+    padding: 0 0.25rem;
+  }
+  
+  .time-slot {
+    font-size: 0.8rem;
+    min-height: 35px;
+  }
+}
+
+/* Reservation Confirmation Overlay */
+.reservation-confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  padding: 1rem;
+}
+
+.reservation-confirmation-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .reservation-confirmation-card {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+}
