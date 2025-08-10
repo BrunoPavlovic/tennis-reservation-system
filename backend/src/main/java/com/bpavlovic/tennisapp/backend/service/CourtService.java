@@ -19,4 +19,9 @@ public class CourtService {
         Club club = clubService.getClubByName(clubName);
         return courtRepository.findCourtsByClub(club);
     }
+
+    public Court getCourtByClubAndName(String clubName, String courtName){
+        Club club = clubService.getClubByName(clubName);
+        return courtRepository.findCourtByClubAndName(club, courtName);
+    }
 }

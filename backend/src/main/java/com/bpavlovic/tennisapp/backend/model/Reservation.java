@@ -3,9 +3,9 @@ package com.bpavlovic.tennisapp.backend.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -23,7 +23,7 @@ public class Reservation {
     @JoinColumn(name = "court_id")
     private Court court;
 
-    private Date date;
+    private LocalDate date;
     private Time startTime;
     private Time endTime;
     private Double creditCost;

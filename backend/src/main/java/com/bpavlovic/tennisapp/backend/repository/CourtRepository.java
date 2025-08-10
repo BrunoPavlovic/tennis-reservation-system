@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface CourtRepository extends JpaRepository<Court, Long> {
     List<Court> findCourtsByClub(Club club);
+    Court findCourtByClubAndName(Club club,String courtName);
 }
