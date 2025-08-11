@@ -29,4 +29,9 @@ public class CreditTransactionService {
         return creditTransactionRepository.existsByPaymentIntentId(paymentIntentId);
     }
 
+    public void saveRefund(Reservation reservation){
+        CreditTransaction creditTransaction = creditTransactionMapper.toRefundEntity(reservation);
+        creditTransactionRepository.save(creditTransaction);
+    }
+
 }

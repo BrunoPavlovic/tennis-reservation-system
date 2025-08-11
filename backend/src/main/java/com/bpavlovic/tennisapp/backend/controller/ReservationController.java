@@ -37,4 +37,14 @@ public class ReservationController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @DeleteMapping("/{reservationId}")
+    public ResponseEntity<?> cancelReservation(@PathVariable Integer reservationId){
+        try {
+            reservationService.cancelReservation(reservationId);
+            return new ResponseEntity<>("Reservation cancelled successfully!", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

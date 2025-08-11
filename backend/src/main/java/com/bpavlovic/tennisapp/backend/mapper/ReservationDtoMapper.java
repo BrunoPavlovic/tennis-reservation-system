@@ -23,6 +23,7 @@ public class ReservationDtoMapper {
         dto.setCreatedAt(reservation.getCreatedAt().toString());
         dto.setUserFirstName(reservation.getUser().getFirstName());
         dto.setUserLastName(reservation.getUser().getLastName());
+        dto.setUserEmail(reservation.getUser().getEmail());
         return dto;
     }
 }

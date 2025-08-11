@@ -33,4 +33,14 @@ public class CreditTransactionMapper {
 
         return creditTransaction;
     }
+
+    public CreditTransaction toRefundEntity(Reservation reservation) {
+        CreditTransaction creditTransaction = new CreditTransaction();
+        creditTransaction.setUser(reservation.getUser());
+        creditTransaction.setAmount(reservation.getCreditCost());
+        creditTransaction.setType("REFUND");
+        creditTransaction.setTimestamp(new Timestamp(System.currentTimeMillis()));
+
+        return creditTransaction;
+    }
 }

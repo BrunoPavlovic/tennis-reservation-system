@@ -9,8 +9,12 @@ import com.bpavlovic.tennisapp.backend.model.Court;
 import com.bpavlovic.tennisapp.backend.model.Reservation;
 import com.bpavlovic.tennisapp.backend.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +46,33 @@ public class ReservationService {
             reservationRepository.save(reservation);
 
             creditTransactionService.saveReservation(reservation);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void cancelReservation(Integer reservationId){
+        try {
+            Reservation reservation = reservationRepository.findById(Long.valueOf(reservationId))
+                    .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
+
+            if (!reservation.getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+                throw new IllegalArgumentException("You can only cancel your own reservations");
+            }
+
+            LocalDate today = LocalDate.now();
+            if (reservation.getDate().isBefore(today)) {
+                throw new IllegalArgumentException("Cannot cancel past reservations");
+            }
+
+            LocalDateTime reservationDateTime = LocalDateTime.of(reservation.getDate(), reservation.getStartTime());
+            LocalDateTime now = LocalDateTime.now();
+            if (reservationDateTime.minusHours(24).isBefore(now)) {
+                throw new IllegalArgumentException("Reservations can only be cancelled up to 24 hours in advance");
+            }
+
+            reservationRepository.delete(reservation);
+            creditTransactionService.saveRefund(reservation);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

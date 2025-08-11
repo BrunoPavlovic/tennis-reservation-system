@@ -13,4 +13,5 @@ public class ReservationDto {
     private String createdAt;
     private String userFirstName;
     private String userLastName;
+    private String userEmail;
 }
