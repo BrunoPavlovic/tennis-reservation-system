@@ -5,7 +5,6 @@ import com.bpavlovic.tennisapp.backend.mapper.UserMapper;
 import com.bpavlovic.tennisapp.backend.model.User;
 import com.bpavlovic.tennisapp.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -50,5 +49,25 @@ public class UserService {
         user.setCreditAmount(newCreditAmount);
         User savedUser = userRepository.save(user);
         return savedUser.getCreditAmount();
+    }
+
+    public void updateEmail(String newEmail){
+        User user = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        user.setEmail(newEmail);
+        userRepository.save(user);
+    }
+
+    public void updatePassword(String password){
+        User user = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        user = userMapper.changePassword(user,password);
+        userRepository.save(user);
     }
 }

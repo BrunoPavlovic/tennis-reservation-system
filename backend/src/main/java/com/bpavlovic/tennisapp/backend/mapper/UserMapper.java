@@ -42,4 +42,9 @@ public class UserMapper {
 
         return userDto;
     }
+
+    public User changePassword(User user, String password){
+        user.setPassword(passwordEncoder.encode(password));
+        return user;
+    }
 }
