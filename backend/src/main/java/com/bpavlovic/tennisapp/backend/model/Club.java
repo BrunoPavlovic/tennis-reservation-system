@@ -24,4 +24,7 @@ public class Club {
 
     @OneToMany(mappedBy = "club")
     private List<Membership> memberships;
+
+    @OneToMany(mappedBy = "club")
+    private List<Court> courts;
 }

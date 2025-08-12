@@ -9,12 +9,13 @@ import {
   MDBCard,
   MDBCardBody,
   MDBInput,
-  MDBIcon
+  MDBIcon,
+  MDBSpinner
 } from 'mdb-react-ui-kit';
 import logo from '../assets/match_point_logo.png';
 
 const Login: React.FC = () => {
-  const { form, error, handleChange, handleSubmit } = useLogin();
+  const { form, error, isLoading, handleChange, handleSubmit } = useLogin();
 
   return (
     <MDBContainer fluid className="d-flex align-items-center justify-content-center" style={{ height: '100vh' }}>
@@ -36,7 +37,16 @@ const Login: React.FC = () => {
                 </div>
 
                 {error && <div className="text-danger">{error}</div>}
-                <MDBBtn className='mb-4' size='lg' type='submit'>Login</MDBBtn>
+                <MDBBtn className='mb-4' size='lg' type='submit' disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <MDBSpinner size="sm" className="me-2" />
+                      Logging in...
+                    </>
+                  ) : (
+                    'Login'
+                  )}
+                </MDBBtn>
                 <p className="text-center">
                   Don't have an account?{' '}
                   <Link to="/register" className="text-primary" style={{ textDecoration: 'underline' }}>Register here</Link>

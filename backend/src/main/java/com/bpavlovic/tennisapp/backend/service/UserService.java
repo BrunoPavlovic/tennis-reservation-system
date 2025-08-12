@@ -1,8 +1,12 @@
 package com.bpavlovic.tennisapp.backend.service;
 
+import com.bpavlovic.tennisapp.backend.dto.UserDto;
+import com.bpavlovic.tennisapp.backend.mapper.UserMapper;
 import com.bpavlovic.tennisapp.backend.model.User;
 import com.bpavlovic.tennisapp.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public User getUserById(Integer userId){
         return userRepository.findById(userId).get();
@@ -23,12 +28,13 @@ public class UserService {
         return userRepository.findByEmailForUpdate(email);
     }
 
-    public Double getCreditAmount(String userEmail) {
-        User user = userRepository.findByEmail(userEmail);
+    public UserDto getUser() {
+        User user = getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         if (user == null) {
             throw new IllegalArgumentException("User not found");
         }
-        return user.getCreditAmount() != null ? user.getCreditAmount() : 0.0;
+
+        return userMapper.toDto(user);
     }
 
     public Double updateCreditAmount(String userEmail, Double newCreditAmount) {

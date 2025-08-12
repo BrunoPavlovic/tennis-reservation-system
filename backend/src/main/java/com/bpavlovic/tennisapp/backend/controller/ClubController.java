@@ -1,6 +1,6 @@
 package com.bpavlovic.tennisapp.backend.controller;
 
-import com.bpavlovic.tennisapp.backend.dto.ClubDto;
+import com.bpavlovic.tennisapp.backend.dto.ClubCreditRequestDto;
 import com.bpavlovic.tennisapp.backend.service.ClubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +20,15 @@ public class ClubController {
     public ResponseEntity<?> getAllClubs(){
         try {
             return new ResponseEntity<>( clubService.getAllClubs(), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/price")
+    public ResponseEntity<?> getCreditPriceForClub(ClubCreditRequestDto clubCreditRequestDto){
+        try {
+            return new ResponseEntity<>( clubService.getClubByName(clubCreditRequestDto.getClub()).getCreditPrice(), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

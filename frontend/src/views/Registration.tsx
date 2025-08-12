@@ -12,12 +12,13 @@ import {
     MDBCardBody,
     MDBCardImage,
     MDBInput,
-    MDBIcon,    
+    MDBIcon,
+    MDBSpinner
 }
 from 'mdb-react-ui-kit';
 
 const Register: React.FC = () => {
-    const { form, clubs, error, validationErrors, handleChange, handleSubmit } = useRegister();
+    const { form, clubs, error, validationErrors, isLoading, handleChange, handleSubmit } = useRegister();
 
     return (
         <MDBContainer fluid className="d-flex align-items-center justify-content-center" style={{ height: "100vh" }}>
@@ -68,7 +69,16 @@ const Register: React.FC = () => {
                             </div>
 
                             {error && <div className="text-danger">{error}</div>}
-                            <MDBBtn className='mb-4' size='lg' type="submit">Sign up</MDBBtn>
+                            <MDBBtn className='mb-4' size='lg' type="submit" disabled={isLoading}>
+                              {isLoading ? (
+                                <>
+                                  <MDBSpinner size="sm" className="me-2" />
+                                  Signing up...
+                                </>
+                              ) : (
+                                'Sign up'
+                              )}
+                            </MDBBtn>
                             <p className="text-center">
                                 Already have an account?{' '}
                                 <Link to="/login" className="text-primary" style={{ textDecoration: 'underline' }}>Login here</Link>

@@ -3,6 +3,7 @@ package com.bpavlovic.tennisapp.backend.service;
 import com.bpavlovic.tennisapp.backend.dto.CreditTransactionDto;
 import com.bpavlovic.tennisapp.backend.mapper.CreditTransactionMapper;
 import com.bpavlovic.tennisapp.backend.model.CreditTransaction;
+import com.bpavlovic.tennisapp.backend.model.Reservation;
 import com.bpavlovic.tennisapp.backend.repository.CreditTransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,18 @@ public class CreditTransactionService {
         creditTransactionRepository.save(creditTransaction);
     }
 
+    public void saveReservation(Reservation reservation){
+        CreditTransaction creditTransaction = creditTransactionMapper.toEntity(reservation);
+        creditTransactionRepository.save(creditTransaction);
+    }
+
     public boolean existsByPaymentIntentId(String paymentIntentId){
         return creditTransactionRepository.existsByPaymentIntentId(paymentIntentId);
+    }
+
+    public void saveRefund(Reservation reservation){
+        CreditTransaction creditTransaction = creditTransactionMapper.toRefundEntity(reservation);
+        creditTransactionRepository.save(creditTransaction);
     }
 
 }

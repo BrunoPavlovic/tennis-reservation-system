@@ -1,4 +1,4 @@
-interface Club{
+export interface Club{
     name: string;
     creditAmount: number;
 }
