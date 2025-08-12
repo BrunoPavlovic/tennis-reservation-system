@@ -22,6 +22,8 @@ export const useAuth = () => {
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userCredit');
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('userClub');
         setUsername('');
         setIsAuthenticated(false);
         window.location.href = '/login';

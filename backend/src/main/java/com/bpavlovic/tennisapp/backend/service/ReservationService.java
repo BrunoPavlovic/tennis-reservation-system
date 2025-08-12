@@ -2,14 +2,19 @@ package com.bpavlovic.tennisapp.backend.service;
 
 import com.bpavlovic.tennisapp.backend.dto.CreateReservationDto;
 import com.bpavlovic.tennisapp.backend.dto.ReservationDto;
+import com.bpavlovic.tennisapp.backend.dto.ReservationOverviewDto;
 import com.bpavlovic.tennisapp.backend.dto.ReservationRequestDto;
 import com.bpavlovic.tennisapp.backend.mapper.ReservationDtoMapper;
 import com.bpavlovic.tennisapp.backend.mapper.ReservationMapper;
 import com.bpavlovic.tennisapp.backend.model.Court;
 import com.bpavlovic.tennisapp.backend.model.Reservation;
+import com.bpavlovic.tennisapp.backend.model.User;
 import com.bpavlovic.tennisapp.backend.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +29,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final CourtService courtService;
+    private final UserService userService;
     private final ReservationMapper reservationMapper;
     private final ReservationDtoMapper reservationDtoMapper;
     private final CreditTransactionService creditTransactionService;
@@ -38,6 +44,15 @@ public class ReservationService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Page<ReservationOverviewDto> getReservationForUser(int page, int size){
+        User user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<Reservation> reservations = reservationRepository.findByUser(user, pageable);
+
+        return reservations.map(reservationDtoMapper::toOverviewDto);
     }
 
     public void createReservation(CreateReservationDto createReservationDto){

@@ -1,6 +1,7 @@
 package com.bpavlovic.tennisapp.backend.mapper;
 
 import com.bpavlovic.tennisapp.backend.dto.ReservationDto;
+import com.bpavlovic.tennisapp.backend.dto.ReservationOverviewDto;
 import com.bpavlovic.tennisapp.backend.model.Reservation;
 import org.springframework.stereotype.Component;
 
@@ -25,5 +26,17 @@ public class ReservationDtoMapper {
         dto.setUserLastName(reservation.getUser().getLastName());
         dto.setUserEmail(reservation.getUser().getEmail());
         return dto;
+    }
+
+    public ReservationOverviewDto toOverviewDto(Reservation reservation){
+        ReservationOverviewDto reservationOverviewDto = new ReservationOverviewDto();
+        reservationOverviewDto.setDate(reservation.getDate().format(DATE_FORMATTER));
+        reservationOverviewDto.setClubName(reservation.getCourt().getClub().getName());
+        reservationOverviewDto.setCourtName(reservation.getCourt().getName());
+        reservationOverviewDto.setStartTime(reservation.getStartTime().format(TIME_FORMATTER));
+        reservationOverviewDto.setEndTime(reservation.getEndTime().format(TIME_FORMATTER));
+        reservationOverviewDto.setCreditCost(reservation.getCreditCost());
+
+        return reservationOverviewDto;
     }
 }

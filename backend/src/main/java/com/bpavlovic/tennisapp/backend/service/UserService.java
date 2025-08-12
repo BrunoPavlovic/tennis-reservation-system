@@ -5,7 +5,8 @@ import com.bpavlovic.tennisapp.backend.mapper.UserMapper;
 import com.bpavlovic.tennisapp.backend.model.User;
 import com.bpavlovic.tennisapp.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User getUserById(Integer userId){
         return userRepository.findById(userId).get();
@@ -50,5 +54,38 @@ public class UserService {
         user.setCreditAmount(newCreditAmount);
         User savedUser = userRepository.save(user);
         return savedUser.getCreditAmount();
+    }
+
+    public void updateEmail(String newEmail){
+        User user = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        User existingUser = userRepository.findByEmail(newEmail);
+        if (existingUser != null && !existingUser.getUserId().equals(user.getUserId())) {
+            throw new IllegalArgumentException("Email is already taken by another user");
+        }
+
+        user.setEmail(newEmail);
+        userRepository.save(user);
+    }
+
+    public void updatePassword(String currentPassword, String newPassword){
+        User user = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
+
+        if (passwordEncoder.matches(newPassword, user.getPassword())) {
+            throw new IllegalArgumentException("New password must be different from current password");
+        }
+
+        user = userMapper.changePassword(user, newPassword);
+        userRepository.save(user);
     }
 }

@@ -187,6 +187,31 @@ body::before {
   animation: slideIn 0.3s ease-out;
 }
 
+/* Profile Dialog Overlay */
+.profile-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  padding: 1rem;
+}
+
+.profile-dialog-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -203,4 +228,24 @@ body::before {
     padding: 1.5rem;
     margin: 1rem;
   }
+  
+  .profile-dialog-card {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+}
+
+/* Pagination disabled state */
+.pagination .page-link.disabled {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: #fff;
+  border-color: #dee2e6;
+  opacity: 0.5;
+}
+
+.pagination .page-link.active {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: white;
 }
