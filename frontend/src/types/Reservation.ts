@@ -21,6 +21,15 @@ export interface Reservation {
   userEmail: string;
 }
 
+export interface UserReservationOverview {
+  clubName: string;
+  courtName: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  creditCost: number;
+}
+
 export interface CreateReservationDto {
   date: string;
   club: string;

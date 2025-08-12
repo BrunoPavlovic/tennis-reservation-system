@@ -234,3 +234,18 @@ body::before {
     margin: 1rem;
   }
 }
+
+/* Pagination disabled state */
+.pagination .page-link.disabled {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: #fff;
+  border-color: #dee2e6;
+  opacity: 0.5;
+}
+
+.pagination .page-link.active {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: white;
+}

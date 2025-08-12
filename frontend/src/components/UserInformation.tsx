@@ -50,10 +50,6 @@ const UserInformation: React.FC = () => {
     <>
       <MDBCard className="shadow-5" style={{ borderRadius: "15px" }}>
         <MDBCardBody className="p-4 p-md-5">
-          <div className="text-center mb-4">
-            <MDBCardTitle className="fw-bold h3">User Information</MDBCardTitle>
-          </div>
-
           {/* Success Message - Only show when no dialogs are open */}
           {!showEmailModal && !showPasswordModal && success && (
             <div className="alert alert-success mb-4" role="alert">
@@ -63,7 +59,6 @@ const UserInformation: React.FC = () => {
 
           {user && (
             <div className="row">
-              {/* Left side - User Icon */}
               <div className="col-12 col-md-3 text-center mb-4 mb-md-0">
                 <MDBIcon 
                   fas 
@@ -73,8 +68,6 @@ const UserInformation: React.FC = () => {
                   style={{ minWidth: "80px" }}
                 />
               </div>
-
-              {/* Right side - User Information */}
               <div className="col-12 col-md-9">
                 <div className="mb-4">
                   <h5 className="fw-bold mb-1">
