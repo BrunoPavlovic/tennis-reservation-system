@@ -11,6 +11,10 @@ import com.bpavlovic.tennisapp.backend.model.Reservation;
 import com.bpavlovic.tennisapp.backend.model.User;
 import com.bpavlovic.tennisapp.backend.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -43,13 +47,13 @@ public class ReservationService {
         }
     }
 
-    public List<ReservationOverviewDto> getReservationForUser(){
+    public Page<ReservationOverviewDto> getReservationForUser(int page, int size){
         User user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        List<Reservation> reservations = reservationRepository.findByUser(user);
 
-        return reservations.stream()
-                .map(reservationDtoMapper::toOverviewDto)
-                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<Reservation> reservations = reservationRepository.findByUser(user, pageable);
+
+        return reservations.map(reservationDtoMapper::toOverviewDto);
     }
 
     public void createReservation(CreateReservationDto createReservationDto){

@@ -3,6 +3,7 @@ package com.bpavlovic.tennisapp.backend.controller;
 import com.bpavlovic.tennisapp.backend.dto.*;
 import com.bpavlovic.tennisapp.backend.service.ReservationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +28,9 @@ public class ReservationController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<?> getReservationsForUser(){
+    public ResponseEntity<?> getReservationsForUser(@RequestParam(defaultValue = "0") int page){
         try {
-            List<ReservationOverviewDto> reservations = reservationService.getReservationForUser();
+            Page<ReservationOverviewDto> reservations = reservationService.getReservationForUser(page, 5);
             return ResponseEntity.ok(reservations);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
