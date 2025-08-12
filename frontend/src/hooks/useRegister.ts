@@ -15,6 +15,7 @@ export const useRegister = () => {
   const [error, setError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<Record<string,string>>({});
   const [clubs, setClubs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const validate = () => {
@@ -54,11 +55,16 @@ export const useRegister = () => {
       return;
     }
 
+    setIsLoading(true);
+    setError('');
+
     try {
       await api.post("/auth/register", form);
       navigate("/login");
     } catch (err: any) {
       setError(err.response?.data || "An error occurred during registration.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -67,6 +73,7 @@ export const useRegister = () => {
     error,
     validationErrors,
     clubs,
+    isLoading,
     handleChange,
     handleSubmit,
   };
