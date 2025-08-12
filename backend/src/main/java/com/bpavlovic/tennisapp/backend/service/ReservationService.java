@@ -2,11 +2,13 @@ package com.bpavlovic.tennisapp.backend.service;
 
 import com.bpavlovic.tennisapp.backend.dto.CreateReservationDto;
 import com.bpavlovic.tennisapp.backend.dto.ReservationDto;
+import com.bpavlovic.tennisapp.backend.dto.ReservationOverviewDto;
 import com.bpavlovic.tennisapp.backend.dto.ReservationRequestDto;
 import com.bpavlovic.tennisapp.backend.mapper.ReservationDtoMapper;
 import com.bpavlovic.tennisapp.backend.mapper.ReservationMapper;
 import com.bpavlovic.tennisapp.backend.model.Court;
 import com.bpavlovic.tennisapp.backend.model.Reservation;
+import com.bpavlovic.tennisapp.backend.model.User;
 import com.bpavlovic.tennisapp.backend.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -24,6 +26,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final CourtService courtService;
+    private final UserService userService;
     private final ReservationMapper reservationMapper;
     private final ReservationDtoMapper reservationDtoMapper;
     private final CreditTransactionService creditTransactionService;
@@ -38,6 +41,15 @@ public class ReservationService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<ReservationOverviewDto> getReservationForUser(){
+        User user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        List<Reservation> reservations = reservationRepository.findByUser(user);
+
+        return reservations.stream()
+                .map(reservationDtoMapper::toOverviewDto)
+                .collect(Collectors.toList());
     }
 
     public void createReservation(CreateReservationDto createReservationDto){

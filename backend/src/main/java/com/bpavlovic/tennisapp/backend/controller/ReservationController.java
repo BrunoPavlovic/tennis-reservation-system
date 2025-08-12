@@ -1,8 +1,6 @@
 package com.bpavlovic.tennisapp.backend.controller;
 
-import com.bpavlovic.tennisapp.backend.dto.CreateReservationDto;
-import com.bpavlovic.tennisapp.backend.dto.ReservationDto;
-import com.bpavlovic.tennisapp.backend.dto.ReservationRequestDto;
+import com.bpavlovic.tennisapp.backend.dto.*;
 import com.bpavlovic.tennisapp.backend.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +20,16 @@ public class ReservationController {
     public ResponseEntity<?> getReservationsForDate(ReservationRequestDto reservationRequestDto){
         try {
             List<ReservationDto> reservations = reservationService.getReservationsByDateAndCourt(reservationRequestDto);
+            return ResponseEntity.ok(reservations);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<?> getReservationsForUser(){
+        try {
+            List<ReservationOverviewDto> reservations = reservationService.getReservationForUser();
             return ResponseEntity.ok(reservations);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
