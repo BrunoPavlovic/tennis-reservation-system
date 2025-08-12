@@ -1,6 +1,7 @@
 package com.bpavlovic.tennisapp.backend.mapper;
 
 import com.bpavlovic.tennisapp.backend.dto.CreditTransactionDto;
+import com.bpavlovic.tennisapp.backend.dto.TransactionOverviewDto;
 import com.bpavlovic.tennisapp.backend.model.CreditTransaction;
 import com.bpavlovic.tennisapp.backend.model.Reservation;
 import org.springframework.stereotype.Component;
@@ -42,5 +43,14 @@ public class CreditTransactionMapper {
         creditTransaction.setTimestamp(new Timestamp(System.currentTimeMillis()));
 
         return creditTransaction;
+    }
+
+    public TransactionOverviewDto toDto(CreditTransaction creditTransaction){
+        TransactionOverviewDto transaction = new TransactionOverviewDto();
+        transaction.setTimestamp(creditTransaction.getTimestamp());
+        transaction.setAmount(creditTransaction.getAmount());
+        transaction.setType(creditTransaction.getType());
+
+        return transaction;
     }
 }
