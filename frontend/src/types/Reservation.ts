@@ -30,6 +30,12 @@ export interface UserReservationOverview {
   creditCost: number;
 }
 
+export interface UserTransactionOverview {
+  timestamp: string;
+  amount: number;
+  type: string;
+}
+
 export interface CreateReservationDto {
   date: string;
   club: string;
