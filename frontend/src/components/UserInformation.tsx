@@ -108,8 +108,8 @@ const UserInformation: React.FC = () => {
                 <div className="pt-3 border-top">
                   <div className="row text-center">
                     <div className="col-6">
-                      <h6 className="fw-bold text-primary">{user.credit}</h6>
-                      <p className="text-muted small mb-0">Credits</p>
+                      <h6 className="fw-bold text-primary">{user.credit}€</h6>
+                      <p className="text-muted small mb-0">Balance</p>
                     </div>
                     <div className="col-6">
                       <h6 className="fw-bold text-success">{user.club}</h6>

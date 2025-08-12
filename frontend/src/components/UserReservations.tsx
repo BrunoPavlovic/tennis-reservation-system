@@ -135,10 +135,10 @@ const UserReservations: React.FC = () => {
                       <td className="text-center">
                         <div>
                           <span className="badge bg-success fs-6 d-none d-sm-inline">
-                            {reservation.creditCost} credit{reservation.creditCost !== 1 ? 's' : ''}
+                            {reservation.creditCost}€
                           </span>
                           <span className="badge bg-success d-sm-none">
-                            {reservation.creditCost}
+                            {reservation.creditCost}€
                           </span>
                         </div>
                         <div className="d-sm-none text-muted small mt-1">

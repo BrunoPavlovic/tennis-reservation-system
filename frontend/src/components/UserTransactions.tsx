@@ -104,7 +104,7 @@ const UserTransactions: React.FC = () => {
     
     return (
       <span className={`fw-bold ${color}`}>
-        {sign}{Math.abs(amount)} credit{Math.abs(amount) !== 1 ? 's' : ''}
+        {sign}{Math.abs(amount)}€
       </span>
     );
   };
