@@ -19,6 +19,7 @@ export const useCredit = () => {
             setCredit(creditAmount);
             localStorage.setItem('userCredit', creditAmount.toString());
             localStorage.setItem('userClub', response.data.club);
+            localStorage.setItem('userEmail', response.data.email);
         } catch (error) {
             console.error('Error fetching credit:', error);
         } finally {

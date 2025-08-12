@@ -18,6 +18,7 @@ export interface Reservation {
   createdAt: string;
   userFirstName: string;
   userLastName: string;
+  userEmail: string;
 }
 
 export interface CreateReservationDto {

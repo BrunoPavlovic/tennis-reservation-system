@@ -69,6 +69,24 @@ export const useReservation = () => {
         }
     };
 
+    const cancelReservation = async (reservationId: number, currentCredit: number): Promise<boolean> => {
+        try {
+            setIsLoading(true);
+            const response = await api.delete(`/reservations/${reservationId}`);
+            if (response.status === 200) {
+                const newCreditAmount = currentCredit + creditCost;
+                await api.put('/users/credit', { credit: newCreditAmount });
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Error canceling reservation:', error);
+            return false;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const generateTimeSlots = (): TimeSlot[] => {
         const slots: TimeSlot[] = [];
         const startHour = 8;
@@ -156,6 +174,7 @@ export const useReservation = () => {
         fetchCreditCost,
         fetchReservations,
         createReservation,
+        cancelReservation,
         generateWeekSchedule,
         initializeReservation
     };

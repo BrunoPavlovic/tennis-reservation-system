@@ -24,6 +24,7 @@ const Reservation: React.FC = () => {
     creditCost,
     isLoading,
     createReservation,
+    cancelReservation,
     generateWeekSchedule,
     initializeReservation
   } = useReservation();
@@ -42,8 +43,11 @@ const Reservation: React.FC = () => {
     startTime: string;
     endTime: string;
     dayName: string;
+    isMyReservation?: boolean;
+    reservationId?: number;
   } | null>(null);
   const [isCreatingReservation, setIsCreatingReservation] = useState<boolean>(false);
+  const [isCancelingReservation, setIsCancelingReservation] = useState<boolean>(false);
   const [isScheduleLoading, setIsScheduleLoading] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 768);
   const [error, setError] = useState<string>('');
@@ -90,15 +94,15 @@ const Reservation: React.FC = () => {
 
     if (direction === 'prev') {
       newDate.setDate(newDate.getDate() - 7);
-      
+
       // Check if the end of the week (6 days after start) is still in the future
       const weekEndDate = new Date(newDate);
       weekEndDate.setDate(newDate.getDate() + 6);
-      
+
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       weekEndDate.setHours(0, 0, 0, 0);
-      
+
       if (weekEndDate < today) return;
     } else {
       newDate.setDate(newDate.getDate() + 7);
@@ -134,13 +138,18 @@ const Reservation: React.FC = () => {
   };
 
   const handleSlotClick = (slot: TimeSlot, date: string, dayName: string) => {
-    if (slot.isOccupied) return;
+    const currentUserEmail = localStorage.getItem('userEmail');
+    const isMyReservation = slot.reservation?.userEmail === currentUserEmail;
+
+    if (slot.isOccupied && !isMyReservation) return;
 
     setSelectedSlot({
       date,
       startTime: slot.startTime,
       endTime: slot.endTime,
-      dayName
+      dayName,
+      isMyReservation: slot.isOccupied && isMyReservation,
+      reservationId: slot.reservation?.reservationId
     });
     setShowConfirmation(true);
   };
@@ -179,6 +188,41 @@ const Reservation: React.FC = () => {
     }
   };
 
+  const isWithinCancellationWindow = (date: string, startTime: string): boolean => {
+    const reservationDateTime = new Date(`${date}T${startTime}`);
+    const now = new Date();
+    const hoursDifference = (reservationDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+
+    // Can cancel up to 24 hours in advance
+    return hoursDifference >= 24;
+  };
+
+  const handleCancelReservation = async (reservationId: number) => {
+    if (!reservationId) return;
+
+    setIsCancelingReservation(true);
+    setError('');
+    try {
+      const success = await cancelReservation(reservationId, credit);
+      if (success) {
+        await loadSchedule();
+
+        const newCreditAmount = credit + creditCost;
+        (window as any).updateUserCredit?.(newCreditAmount);
+        await (window as any).refreshUserCredit?.();
+        setShowConfirmation(false);
+        setSelectedSlot(null);
+      } else {
+        setError('Failed to cancel reservation. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error canceling reservation:', error);
+      setError('Failed to cancel reservation. Please try again.');
+    } finally {
+      setIsCancelingReservation(false);
+    }
+  };
+
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', {
       weekday: 'long',
@@ -190,7 +234,6 @@ const Reservation: React.FC = () => {
 
   const getCurrentWeekRange = () => {
     const startDate = new Date(currentDate);
-    
     const endDate = new Date(startDate);
     endDate.setDate(startDate.getDate() + 6);
 
@@ -211,20 +254,25 @@ const Reservation: React.FC = () => {
       new Date().getTime() > new Date(`${date}T${slot.startTime}`).getTime();
     const isDisabled = isPastDate || isPastTime;
 
+    const currentUserEmail = localStorage.getItem('userEmail');
+    const isMyReservation = slot.reservation?.userEmail === currentUserEmail;
+
     return (
       <div
         key={`${date}-${slot.startTime}`}
         className={`time-slot p-2 text-center border rounded mb-1 ${isDisabled
-            ? 'bg-secondary text-white cursor-not-allowed'
-            : slot.isOccupied
-              ? 'bg-danger text-white cursor-not-allowed'
-              : 'bg-success text-white hover-bg-success-dark cursor-pointer'
+          ? 'bg-secondary text-white cursor-not-allowed'
+          : slot.isOccupied
+            ? isMyReservation
+              ? 'bg-danger text-white hover-bg-danger-dark cursor-pointer'
+              : 'bg-danger text-white cursor-not-allowed'
+            : 'bg-success text-white hover-bg-success-dark cursor-pointer'
           }`}
         style={{
           minHeight: '40px',
           opacity: isDisabled ? 0.5 : slot.isOccupied ? 0.7 : 1
         }}
-        onClick={() => !isDisabled && !slot.isOccupied && handleSlotClick(slot, date, dayName)}
+        onClick={() => !isDisabled && (slot.isOccupied ? isMyReservation : true) && handleSlotClick(slot, date, dayName)}
       >
         <small>
           {slot.startTime} - {slot.endTime}
@@ -442,7 +490,9 @@ const Reservation: React.FC = () => {
                 <div className="reservation-confirmation-overlay">
                   <div className="reservation-confirmation-card">
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                      <h5 className="mb-0">Confirm Your Reservation</h5>
+                      <h5 className="mb-0">
+                        {selectedSlot.isMyReservation ? 'Your Reservation Details' : 'Confirm Your Reservation'}
+                      </h5>
                       <MDBBtn
                         color="link"
                         className="text-muted p-0"
@@ -459,7 +509,19 @@ const Reservation: React.FC = () => {
                         <p><strong>Cost:</strong> {creditCost} €</p>
                       </div>
                       <div className="col-md-6">
-                        {credit < creditCost ? (
+                        {selectedSlot.isMyReservation ? (
+                          isWithinCancellationWindow(selectedSlot.date, selectedSlot.startTime) ? (
+                            <div className="alert alert-info">
+                              <MDBIcon fas icon="info-circle" className="me-2" />
+                              This is your reservation. You can cancel it up to 24 hours before the start time.
+                            </div>
+                          ) : (
+                            <div className="alert alert-warning">
+                              <MDBIcon fas icon="exclamation-triangle" className="me-2" />
+                              This reservation cannot be cancelled. Cancellations must be made at least 24 hours in advance.
+                            </div>
+                          )
+                        ) : credit < creditCost ? (
                           <div className="alert alert-warning">
                             <MDBIcon fas icon="exclamation-triangle" className="me-2" />
                             Insufficient credit. Please add more credit to make this reservation.
@@ -474,22 +536,43 @@ const Reservation: React.FC = () => {
                     </div>
                     <div className="d-flex gap-2 mt-3">
                       <MDBBtn color="secondary" onClick={() => setShowConfirmation(false)}>
-                        Cancel
+                        Close
                       </MDBBtn>
-                      <MDBBtn
-                        color="primary"
-                        onClick={handleConfirmReservation}
-                        disabled={isCreatingReservation || (credit < creditCost)}
-                      >
-                        {isCreatingReservation ? (
-                          <>
-                            <MDBSpinner size="sm" className="me-2" />
-                            Creating...
-                          </>
-                        ) : (
-                          'Confirm Reservation'
-                        )}
-                      </MDBBtn>
+                      {selectedSlot.isMyReservation ? (
+                        <MDBBtn
+                          color="warning"
+                          onClick={() => {
+                            if (selectedSlot.reservationId) {
+                              handleCancelReservation(selectedSlot.reservationId);
+                            }
+                          }}
+                          disabled={isCancelingReservation || !isWithinCancellationWindow(selectedSlot.date, selectedSlot.startTime)}
+                        >
+                          {isCancelingReservation ? (
+                            <>
+                              <MDBSpinner size="sm" className="me-2" />
+                              Canceling...
+                            </>
+                          ) : (
+                            'Cancel Reservation'
+                          )}
+                        </MDBBtn>
+                      ) : (
+                        <MDBBtn
+                          color="primary"
+                          onClick={handleConfirmReservation}
+                          disabled={isCreatingReservation || (credit < creditCost)}
+                        >
+                          {isCreatingReservation ? (
+                            <>
+                              <MDBSpinner size="sm" className="me-2" />
+                              Creating...
+                            </>
+                          ) : (
+                            'Confirm Reservation'
+                          )}
+                        </MDBBtn>
+                      )}
                     </div>
                   </div>
                 </div>
