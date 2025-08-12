@@ -8,6 +8,10 @@ import com.bpavlovic.tennisapp.backend.model.Reservation;
 import com.bpavlovic.tennisapp.backend.model.User;
 import com.bpavlovic.tennisapp.backend.repository.CreditTransactionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -41,12 +45,11 @@ public class CreditTransactionService {
         creditTransactionRepository.save(creditTransaction);
     }
 
-    public List<TransactionOverviewDto> getTransactionsForUser(){
+    public Page<TransactionOverviewDto> getTransactionsForUser(int page, int size){
         User user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        List<CreditTransaction> transactions = creditTransactionRepository.findByUser(user);
-        return transactions.stream()
-                .map(creditTransactionMapper::toDto)
-                .collect((Collectors.toList()));
+        Pageable pageable = PageRequest.of(page, size, Sort.by("timestamp").descending());
+        Page<CreditTransaction> transactions = creditTransactionRepository.findByUser(user, pageable);
+        return transactions.map(creditTransactionMapper::toDto);
     }
 
 }

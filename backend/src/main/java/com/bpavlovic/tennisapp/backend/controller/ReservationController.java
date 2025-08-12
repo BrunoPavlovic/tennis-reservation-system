@@ -1,6 +1,9 @@
 package com.bpavlovic.tennisapp.backend.controller;
 
-import com.bpavlovic.tennisapp.backend.dto.*;
+import com.bpavlovic.tennisapp.backend.dto.CreateReservationDto;
+import com.bpavlovic.tennisapp.backend.dto.ReservationDto;
+import com.bpavlovic.tennisapp.backend.dto.ReservationOverviewDto;
+import com.bpavlovic.tennisapp.backend.dto.ReservationRequestDto;
 import com.bpavlovic.tennisapp.backend.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
