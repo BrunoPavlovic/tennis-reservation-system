@@ -5,12 +5,15 @@ import com.bpavlovic.tennisapp.backend.dto.UserChangeEmailDto;
 import com.bpavlovic.tennisapp.backend.dto.UserChangePasswordDto;
 import com.bpavlovic.tennisapp.backend.dto.UserDto;
 import com.bpavlovic.tennisapp.backend.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -45,7 +48,14 @@ public class UserController {
     }
 
     @PutMapping("/email")
-    public ResponseEntity<?> updateEmail(@RequestBody UserChangeEmailDto userChangeEmailDto){
+    public ResponseEntity<?> updateEmail(@Valid @RequestBody UserChangeEmailDto userChangeEmailDto, BindingResult result) {
+        if (result.hasErrors()) {
+            String errorMessage = result.getAllErrors().stream()
+                    .map(error -> error.getDefaultMessage())
+                    .collect(Collectors.joining("\n"));
+            return ResponseEntity.badRequest().body("Errors: \n" + errorMessage);
+        }
+        
         try {
             userService.updateEmail(userChangeEmailDto.getEmail());
             return new ResponseEntity<>("User email is updated successfully!", HttpStatus.OK);
@@ -55,9 +65,16 @@ public class UserController {
     }
 
     @PutMapping("/password")
-    public ResponseEntity<?> updatePassword(@RequestBody UserChangePasswordDto userChangePasswordDto){
+    public ResponseEntity<?> updatePassword(@Valid @RequestBody UserChangePasswordDto userChangePasswordDto, BindingResult result) {
+        if (result.hasErrors()) {
+            String errorMessage = result.getAllErrors().stream()
+                    .map(error -> error.getDefaultMessage())
+                    .collect(Collectors.joining("\n"));
+            return ResponseEntity.badRequest().body("Errors: \n" + errorMessage);
+        }
+        
         try {
-            userService.updatePassword(userChangePasswordDto.getPassword());
+            userService.updatePassword(userChangePasswordDto.getCurrentPassword(), userChangePasswordDto.getNewPassword());
             return new ResponseEntity<>("User password is updated successfully!", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

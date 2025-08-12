@@ -1,33 +1,15 @@
 import React from "react";
-import {
-  MDBContainer,
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBIcon
-} from "mdb-react-ui-kit";
+import { MDBContainer } from "mdb-react-ui-kit";
+import UserInformation from "../components/UserInformation";
 
 const Profile: React.FC = () => {
   return (
-    <MDBContainer className="d-flex justify-content-center align-items-center" style={{ minHeight: "80vh" }}>
-      <MDBCard className="shadow-5" style={{ borderRadius: "15px", maxWidth: "600px", width: "100%" }}>
-        <MDBCardBody className="p-5">
-          <div className="text-center mb-4">
-            <MDBIcon fas icon="user-circle" size="3x" className="text-primary mb-3" />
-            <MDBCardTitle className="fw-bold h3">User Profile</MDBCardTitle>
-            <MDBCardText className="text-muted">
-              Manage your account settings and preferences
-            </MDBCardText>
-          </div>
-          
-          <div className="text-center">
-            <p className="text-muted">
-              Profile functionality coming soon...
-            </p>
-          </div>
-        </MDBCardBody>
-      </MDBCard>
+    <MDBContainer className="py-4">
+      <div className="row justify-content-center">
+        <div className="col-12 col-lg-8 col-xl-6">
+          <UserInformation />
+        </div>
+      </div>
     </MDBContainer>
   );
 };
