@@ -232,6 +232,13 @@ const Reservation: React.FC = () => {
     });
   };
 
+  const formatDateForInput = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const getCurrentWeekRange = () => {
     const startDate = new Date(currentDate);
     const endDate = new Date(startDate);
@@ -441,22 +448,22 @@ const Reservation: React.FC = () => {
               {/* Date Picker */}
               <div className="mb-4">
                 <label className="form-label">Select Date:</label>
-                <input
-                  type="date"
-                  className="form-control"
-                  value={currentDate.toISOString().split('T')[0]}
-                  onChange={(e) => {
-                    const selectedDate = new Date(e.target.value);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
+                                 <input
+                   type="date"
+                   className="form-control"
+                   value={formatDateForInput(currentDate)}
+                   onChange={(e) => {
+                     const selectedDate = new Date(e.target.value);
+                     const today = new Date();
+                     today.setHours(0, 0, 0, 0);
 
-                    if (selectedDate >= today) {
-                      setCurrentDate(selectedDate);
-                    }
-                  }}
-                  min={new Date().toISOString().split('T')[0]}
-                  max={new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
-                />
+                     if (selectedDate >= today) {
+                       setCurrentDate(selectedDate);
+                     }
+                   }}
+                   min={formatDateForInput(new Date())}
+                   max={formatDateForInput(new Date(Date.now() + 28 * 24 * 60 * 60 * 1000))}
+                 />
                 <small className="text-muted">
                   You can select any date from today up to 4 weeks in the future
                 </small>
