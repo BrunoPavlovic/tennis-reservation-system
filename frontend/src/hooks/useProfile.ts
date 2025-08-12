@@ -15,7 +15,6 @@ interface PasswordForm {
 export const useProfile = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -35,7 +34,6 @@ export const useProfile = () => {
   const fetchUserData = async () => {
     try {
       setLoading(true);
-      setError(null);
       const response = await api.get("users/me");
       const userData = response.data;
       setUser(userData);
@@ -44,7 +42,7 @@ export const useProfile = () => {
       localStorage.setItem('userCredit', userData.credit.toString());
       localStorage.setItem('userClub', userData.club);
     } catch (err: any) {
-      setError(err.response?.data || "Failed to load user data");
+      console.error("Failed to load user data:", err.response?.data || err.message);
     } finally {
       setLoading(false);
     }
@@ -94,13 +92,11 @@ export const useProfile = () => {
 
   const handleEmailUpdate = async () => {
     if (!validateEmail(emailForm.email)) {
-      setError("Please fix the validation errors before submitting.");
       return;
     }
 
     try {
       setEmailLoading(true);
-      setError(null);
       await api.put('/users/email', { email: emailForm.email });
       setSuccess("Email updated successfully! You need to log in again with your new email.");
       setShowEmailModal(false);
@@ -116,7 +112,7 @@ export const useProfile = () => {
       }, 3000);
       
     } catch (err: any) {
-      setError(err.response?.data || "Failed to update email");
+      console.error("Failed to update email:", err.response?.data || err.message);
     } finally {
       setEmailLoading(false);
     }
@@ -124,13 +120,11 @@ export const useProfile = () => {
 
   const handlePasswordChange = async () => {
     if (!validatePassword(passwordForm)) {
-      setError("Please fix the validation errors before submitting.");
       return;
     }
 
     try {
       setPasswordLoading(true);
-      setError(null);
       await api.put('/users/password', { 
         currentPassword: passwordForm.currentPassword,
         newPassword: passwordForm.newPassword 
@@ -153,7 +147,7 @@ export const useProfile = () => {
       }, 3000);
       
     } catch (err: any) {
-      setError(err.response?.data || "Failed to change password");
+      console.error("Failed to change password:", err.response?.data || err.message);
     } finally {
       setPasswordLoading(false);
     }
@@ -196,19 +190,10 @@ export const useProfile = () => {
     if (success && !success.includes("You need to log in again")) {
       const timer = setTimeout(() => {
         setSuccess(null);
-      }, 5000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [success]);
-
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        setError(null);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [error]);
 
   return {
     // User data
