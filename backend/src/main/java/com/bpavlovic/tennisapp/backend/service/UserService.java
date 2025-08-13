@@ -1,11 +1,15 @@
 package com.bpavlovic.tennisapp.backend.service;
 
 import com.bpavlovic.tennisapp.backend.dto.UserDto;
+import com.bpavlovic.tennisapp.backend.dto.UserAdminDto;
 import com.bpavlovic.tennisapp.backend.mapper.UserMapper;
+import com.bpavlovic.tennisapp.backend.mapper.UserAdminMapper;
 import com.bpavlovic.tennisapp.backend.model.User;
 import com.bpavlovic.tennisapp.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserAdminMapper userAdminMapper;
     
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -87,5 +92,19 @@ public class UserService {
 
         user = userMapper.changePassword(user, newPassword);
         userRepository.save(user);
+    }
+
+    public Page<UserAdminDto> getAllUsers(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        return users.map(userAdminMapper::toDto);
+    }
+
+    public UserAdminDto deactivateUser(Long id) {
+        User user = userRepository.findById(Math.toIntExact(id))
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+        
+        user.setActive(false);
+        User updatedUser = userRepository.save(user);
+        return userAdminMapper.toDto(updatedUser);
     }
 }
