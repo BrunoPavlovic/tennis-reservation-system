@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 export const useAuth = () => {
     const [username, setUsername] = useState<string>('');
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [user, setUser] = useState<any>(null);
 
-    // Decode JWT token to get username
     const decodeToken = (token: string) => {
         try {
             const base64Url = token.split('.')[1];
@@ -26,6 +26,7 @@ export const useAuth = () => {
         localStorage.removeItem('userClub');
         setUsername('');
         setIsAuthenticated(false);
+        setUser(null);
         window.location.href = '/login';
     };
 
@@ -36,6 +37,19 @@ export const useAuth = () => {
             if (decoded && decoded.sub) {
                 setUsername(decoded.sub);
                 setIsAuthenticated(true);
+                
+                let role = 'USER';
+                if (decoded.role && decoded.role.length > 0) {
+                    const roleAuthority = decoded.role[0].authority;
+                    if (roleAuthority === 'ROLE_ADMIN') {
+                        role = 'ADMIN';
+                    }
+                }
+                
+                setUser({
+                    email: decoded.sub,
+                    role: role
+                });
             } else {
                 logout();
             }
@@ -45,6 +59,7 @@ export const useAuth = () => {
     return {
         username,
         isAuthenticated,
+        user,
         logout
     };
 };

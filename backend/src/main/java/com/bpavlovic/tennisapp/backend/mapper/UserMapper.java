@@ -29,6 +29,7 @@ public class UserMapper {
         user.setRole("USER");
         user.setCreditAmount(0.0);
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setActive(true);
         return user;
     }
 

@@ -32,6 +32,8 @@ public class User {
 
     private Timestamp createdAt;
 
+    private Boolean active;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Membership> memberships;
 

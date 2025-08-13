@@ -4,12 +4,17 @@ import Login from "./views/Login";
 import Home from "./views/Home";
 import AuthRedirect from "./components/AuthRedirect";
 import UnAuthRedirect from "./components/UnAuthRedirect";
+import AdminRedirect from "./components/AdminRedirect";
 import SharedLayout from "./components/SharedLayout";
+import AdminLayout from "./components/AdminLayout";
 import Reservation from "./views/Reservation";
 import Profile from "./views/Profile";
 import Credit from "./views/Credit";
 import PaymentSuccess from "./views/PaymentSuccess";
 import PaymentCancelled from "./views/PaymentCancelled";
+import AdminClubs from "./views/AdminClubs";
+import AdminCourts from "./views/AdminCourts";
+import AdminUsers from "./views/AdminUsers";
 
 const App: React.FC = () => {
   return (
@@ -26,6 +31,13 @@ const App: React.FC = () => {
           <Route path="/credit" element={<UnAuthRedirect><Credit /></UnAuthRedirect>} />
           <Route path="/payment-success" element={<UnAuthRedirect><PaymentSuccess /></UnAuthRedirect>} />
           <Route path="/payment-cancelled" element={<UnAuthRedirect><PaymentCancelled /></UnAuthRedirect>} />
+        </Route>
+
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<Navigate to="/admin/clubs"/>} />
+          <Route path="/admin/clubs" element={<AdminRedirect><AdminClubs /></AdminRedirect>} />
+          <Route path="/admin/courts" element={<AdminRedirect><AdminCourts /></AdminRedirect>} />
+          <Route path="/admin/users" element={<AdminRedirect><AdminUsers /></AdminRedirect>} />
         </Route>
       </Routes>
     </Router>
