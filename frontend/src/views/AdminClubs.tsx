@@ -101,12 +101,12 @@ const AdminClubs: React.FC = () => {
     <>
       <MDBCard className="shadow-5" style={{ borderRadius: "15px" }}>
         <MDBCardBody className="p-4 p-md-5">
-          <div className="d-flex justify-content-between align-items-center mb-4">
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
             <MDBCardTitle className="fw-bold h4 mb-0">
               <MDBIcon fas icon="building" className="me-2 text-primary" />
               Manage Clubs
             </MDBCardTitle>
-            <div className="d-flex align-items-center gap-3">
+            <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2 gap-sm-3">
               <MDBBtn color="primary" onClick={() => handleShowDialog()}>
                 <MDBIcon fas icon="plus" className="me-2" />
                 Add Club
@@ -139,73 +139,125 @@ const AdminClubs: React.FC = () => {
             </div>
           ) : (
             <>
-              <div className="table-responsive">
-                <MDBTable hover responsive className="mb-0">
-                  <MDBTableHead className="table-dark">
-                    <tr>
-                      <th scope="col">Club Name</th>
-                      <th scope="col">Credit Price</th>
-                      <th scope="col">Courts</th>
-                      <th scope="col">Members</th>
-                      <th scope="col">Created At</th>
-                      <th scope="col" className="text-center">Actions</th>
-                    </tr>
-                  </MDBTableHead>
-                  <MDBTableBody>
-                    {clubs.map((club) => (
-                      <tr key={club.clubId} className="align-middle">
-                        <td>
-                          <div className="fw-bold text-primary">{club.name}</div>
-                        </td>
-                        <td>
-                          <span className="badge bg-success fs-6">
-                            {club.creditPrice}€
-                          </span>
-                        </td>
-                        <td>
-                          <span className="badge bg-info fs-6">
-                            {club.courtCount}
-                          </span>
-                        </td>
-                        <td>
-                          <span className="badge bg-warning fs-6">
-                            {club.memberCount}
-                          </span>
-                        </td>
-                        <td>
-                          <div className="text-muted">
-                            {formatDate(club.createdAt)}
-                          </div>
-                        </td>
-                        <td className="text-center">
-                          <div className="d-flex justify-content-center gap-2">
-                            <MDBBtn
-                              color="info"
-                              size="sm"
-                              onClick={() => handleShowDialog(club)}
-                            >
-                              <MDBIcon fas icon="edit" />
-                            </MDBBtn>
-                            <MDBBtn
-                              color="danger"
-                              size="sm"
-                              onClick={() => handleDelete(club.clubId)}
-                            >
-                              <MDBIcon fas icon="trash" />
-                            </MDBBtn>
-                          </div>
-                        </td>
+              {/* Desktop/Tablet Table View */}
+              <div className="d-none d-md-block">
+                <div className="table-responsive">
+                  <MDBTable hover responsive className="mb-0">
+                    <MDBTableHead className="table-dark">
+                      <tr>
+                        <th scope="col">Club Name</th>
+                        <th scope="col">Credit Price</th>
+                        <th scope="col" className="d-none d-lg-table-cell">Courts</th>
+                        <th scope="col" className="d-none d-lg-table-cell">Members</th>
+                        <th scope="col" className="d-none d-xl-table-cell">Created At</th>
+                        <th scope="col" className="text-center">Actions</th>
                       </tr>
-                    ))}
-                  </MDBTableBody>
-                </MDBTable>
+                    </MDBTableHead>
+                    <MDBTableBody>
+                      {clubs.map((club) => (
+                        <tr key={club.clubId} className="align-middle">
+                          <td>
+                            <div className="fw-bold text-primary">{club.name}</div>
+                          </td>
+                          <td>
+                            <span className="badge bg-success fs-6">
+                              {club.creditPrice}€
+                            </span>
+                          </td>
+                          <td className="d-none d-lg-table-cell">
+                            <span className="badge bg-info fs-6">
+                              {club.courtCount}
+                            </span>
+                          </td>
+                          <td className="d-none d-lg-table-cell">
+                            <span className="badge bg-warning fs-6">
+                              {club.memberCount}
+                            </span>
+                          </td>
+                          <td className="d-none d-xl-table-cell">
+                            <div className="text-muted">
+                              {formatDate(club.createdAt)}
+                            </div>
+                          </td>
+                          <td className="text-center">
+                            <div className="d-flex justify-content-center gap-2 flex-wrap">
+                              <MDBBtn
+                                color="info"
+                                size="sm"
+                                onClick={() => handleShowDialog(club)}
+                                className="mb-1"
+                              >
+                                <MDBIcon fas icon="edit" />
+                              </MDBBtn>
+                              <MDBBtn
+                                color="danger"
+                                size="sm"
+                                onClick={() => handleDelete(club.clubId)}
+                                className="mb-1"
+                              >
+                                <MDBIcon fas icon="trash" />
+                              </MDBBtn>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </MDBTableBody>
+                  </MDBTable>
+                </div>
+              </div>
+
+              {/* Mobile Cards View */}
+              <div className="d-md-none">
+                {clubs.map((club) => (
+                  <div key={club.clubId} className="card mb-3 shadow-sm">
+                    <div className="card-body">
+                      <div className="d-flex justify-content-between align-items-start mb-2">
+                        <h6 className="card-title text-primary mb-0">{club.name}</h6>
+                        <div className="d-flex gap-1">
+                          <MDBBtn
+                            color="info"
+                            size="sm"
+                            onClick={() => handleShowDialog(club)}
+                          >
+                            <MDBIcon fas icon="edit" />
+                          </MDBBtn>
+                          <MDBBtn
+                            color="danger"
+                            size="sm"
+                            onClick={() => handleDelete(club.clubId)}
+                          >
+                            <MDBIcon fas icon="trash" />
+                          </MDBBtn>
+                        </div>
+                      </div>
+                      <div className="row g-2">
+                        <div className="col-6">
+                          <small className="text-muted">Credit Price:</small>
+                          <div className="badge bg-success fs-6">{club.creditPrice}€</div>
+                        </div>
+                        <div className="col-6">
+                          <small className="text-muted">Courts:</small>
+                          <div className="badge bg-info fs-6">{club.courtCount}</div>
+                        </div>
+                        <div className="col-6">
+                          <small className="text-muted">Members:</small>
+                          <div className="badge bg-warning fs-6">{club.memberCount}</div>
+                        </div>
+                        <div className="col-6">
+                          <small className="text-muted">Created:</small>
+                          <div className="text-muted">{formatDate(club.createdAt)}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
 
               {totalPages > 1 && (
                 <div className="d-flex justify-content-center mt-4">
                   <MDBPagination className="mb-0">
                     <MDBPaginationItem disabled={currentPage === 0}>
-                      <MDBPaginationLink 
+                      <MDBPaginationLink
                         onClick={() => handlePageChange(currentPage - 1)}
                         className={currentPage === 0 ? 'disabled' : ''}
                       >
@@ -217,14 +269,14 @@ const AdminClubs: React.FC = () => {
                       const maxVisiblePages = 5;
                       let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
                       let endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
-                      
+
                       if (endPage - startPage + 1 < maxVisiblePages) {
                         startPage = Math.max(0, endPage - maxVisiblePages + 1);
                       }
-                      
+
                       return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
                         <MDBPaginationItem key={page} active={page === currentPage}>
-                          <MDBPaginationLink 
+                          <MDBPaginationLink
                             onClick={() => handlePageChange(page)}
                             className={page === currentPage ? 'active' : ''}
                           >
@@ -235,7 +287,7 @@ const AdminClubs: React.FC = () => {
                     })()}
 
                     <MDBPaginationItem disabled={currentPage === totalPages - 1}>
-                      <MDBPaginationLink 
+                      <MDBPaginationLink
                         onClick={() => handlePageChange(currentPage + 1)}
                         className={currentPage === totalPages - 1 ? 'disabled' : ''}
                       >
@@ -250,61 +302,61 @@ const AdminClubs: React.FC = () => {
         </MDBCardBody>
       </MDBCard>
 
-       {showDialog && (
-         <>
-           <div className="modal fade show" style={{ display: 'block', zIndex: 1050 }} tabIndex={-1}>
-             <div className="modal-dialog">
-               <div className="modal-content">
-                 <div className="modal-header">
-                   <h5 className="modal-title">
-                     {editingClub ? 'Edit Club' : 'Add New Club'}
-                   </h5>
-                   <button type="button" className="btn-close" onClick={handleCloseDialog}></button>
-                 </div>
-                 <div className="modal-body">
-                   <MDBInput
-                     label="Club Name"
-                     value={formData.name}
-                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                     className="mb-3"
-                     required
-                   />
-                   <MDBInput
-                     label="Credit Price (€)"
-                     type="number"
-                     value={formData.creditPrice}
-                     onChange={(e) => setFormData({ ...formData, creditPrice: e.target.value })}
-                     step="0.01"
-                     min="0"
-                     required
-                   />
-                 </div>
-                 <div className="modal-footer">
-                   <MDBBtn color="secondary" onClick={handleCloseDialog}>
-                     Cancel
-                   </MDBBtn>
-                   <MDBBtn color="primary" onClick={handleSubmit}>
-                     {editingClub ? 'Update' : 'Create'}
-                   </MDBBtn>
-                 </div>
-               </div>
-             </div>
-           </div>
-           <div 
-             className="modal-backdrop fade show" 
-             style={{ 
-               position: 'fixed',
-               top: 0,
-               left: 0,
-               width: '100vw',
-               height: '100vh',
-               backgroundColor: 'rgba(0, 0, 0, 0.5)',
-               zIndex: 1040 
-             }}
-             onClick={handleCloseDialog}
-           ></div>
-         </>
-       )}
+      {showDialog && (
+        <>
+          <div className="modal fade show" style={{ display: 'block', zIndex: 1050 }} tabIndex={-1}>
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    {editingClub ? 'Edit Club' : 'Add New Club'}
+                  </h5>
+                  <button type="button" className="btn-close" onClick={handleCloseDialog}></button>
+                </div>
+                <div className="modal-body">
+                  <MDBInput
+                    label="Club Name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="mb-3"
+                    required
+                  />
+                  <MDBInput
+                    label="Credit Price (€)"
+                    type="number"
+                    value={formData.creditPrice}
+                    onChange={(e) => setFormData({ ...formData, creditPrice: e.target.value })}
+                    step="0.01"
+                    min="0"
+                    required
+                  />
+                </div>
+                <div className="modal-footer">
+                  <MDBBtn color="secondary" onClick={handleCloseDialog}>
+                    Cancel
+                  </MDBBtn>
+                  <MDBBtn color="primary" onClick={handleSubmit}>
+                    {editingClub ? 'Update' : 'Create'}
+                  </MDBBtn>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="modal-backdrop fade show"
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 1040
+            }}
+            onClick={handleCloseDialog}
+          ></div>
+        </>
+      )}
     </>
   );
 };
