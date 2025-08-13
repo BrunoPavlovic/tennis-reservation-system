@@ -57,12 +57,33 @@ public class ReservationService {
 
     public void createReservation(CreateReservationDto createReservationDto){
         try {
+            Court court = courtService.getCourtByClubAndName(createReservationDto.getClub(), createReservationDto.getCourt());
+            List<Reservation> existingReservations = reservationRepository.getReservationByDateAndCourt(createReservationDto.getDate(), court);
+
+            for (Reservation existingReservation : existingReservations) {
+                if (createReservationDto.getStartTime().equals(existingReservation.getStartTime())) {
+                    throw new IllegalArgumentException("This time slot is already reserved. Please choose a different time.");
+                }
+            }
+
+            User user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+            if (user.getCreditAmount() < court.getClub().getCreditPrice()) {
+                throw new IllegalArgumentException("Insufficient credit. You need " + court.getClub().getCreditPrice() + "€ to make this reservation.");
+            }
+
+            LocalDate today = LocalDate.now();
+            if (createReservationDto.getDate().isBefore(today)) {
+                throw new IllegalArgumentException("Cannot make reservations for past dates.");
+            }
+
             Reservation reservation = reservationMapper.toEntity(createReservationDto);
             reservationRepository.save(reservation);
 
             creditTransactionService.saveReservation(reservation);
+        } catch (IllegalArgumentException e) {
+            throw e;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to create reservation: " + e.getMessage());
         }
     }
 
@@ -85,7 +106,7 @@ public class ReservationService {
             if (reservationDateTime.minusHours(24).isBefore(now)) {
                 throw new IllegalArgumentException("Reservations can only be cancelled up to 24 hours in advance");
             }
-
+            
             reservationRepository.delete(reservation);
             creditTransactionService.saveRefund(reservation);
         } catch (Exception e) {
