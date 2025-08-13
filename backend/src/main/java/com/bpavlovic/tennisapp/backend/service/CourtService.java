@@ -42,6 +42,7 @@ public class CourtService {
         return courts.map(courtAdminMapper::toDto);
     }
 
+    @Cacheable(value = "courts")
     public Court getCourtByClubAndName(String clubName, String courtName){
         Club club = clubService.getClubByName(clubName);
         return courtRepository.findByClubAndName(club, courtName);

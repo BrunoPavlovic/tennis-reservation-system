@@ -11,6 +11,8 @@ import com.bpavlovic.tennisapp.backend.model.Reservation;
 import com.bpavlovic.tennisapp.backend.model.User;
 import com.bpavlovic.tennisapp.backend.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +36,7 @@ public class ReservationService {
     private final ReservationDtoMapper reservationDtoMapper;
     private final CreditTransactionService creditTransactionService;
 
+    @Cacheable(value = "reservations")
     public List<ReservationDto> getReservationsByDateAndCourt(ReservationRequestDto reservationRequestDto){
         try {
             Court court = courtService.getCourtByClubAndName(reservationRequestDto.getClub(), reservationRequestDto.getCourt());
@@ -55,6 +58,7 @@ public class ReservationService {
         return reservations.map(reservationDtoMapper::toOverviewDto);
     }
 
+    @CacheEvict(value = "reservations", allEntries = true)
     public void createReservation(CreateReservationDto createReservationDto){
         try {
             Court court = courtService.getCourtByClubAndName(createReservationDto.getClub(), createReservationDto.getCourt());
@@ -87,6 +91,7 @@ public class ReservationService {
         }
     }
 
+    @CacheEvict(value = "reservations", allEntries = true)
     public void cancelReservation(Integer reservationId){
         try {
             Reservation reservation = reservationRepository.findById(Long.valueOf(reservationId))
