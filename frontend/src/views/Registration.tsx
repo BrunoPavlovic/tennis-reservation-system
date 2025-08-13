@@ -16,6 +16,7 @@ import {
     MDBSpinner
 }
 from 'mdb-react-ui-kit';
+import PasswordInput from '../components/PasswordInput';
 
 const Register: React.FC = () => {
     const { form, clubs, error, validationErrors, isLoading, handleChange, handleSubmit } = useRegister();
@@ -47,8 +48,15 @@ const Register: React.FC = () => {
 
                             <div className="d-flex flex-row align-items-center mb-4">
                                 <MDBIcon fas icon="lock me-3" size='lg' />
-                                <MDBInput label='Password' id='password' type='password' name="password" value={form.password} onChange={handleChange} required
-                                    className={validationErrors.password ? 'is-invalid' : ''}/>
+                                <PasswordInput 
+                                    label='Password' 
+                                    id='password' 
+                                    name="password" 
+                                    value={form.password} 
+                                    onChange={handleChange} 
+                                    required
+                                    className={validationErrors.password ? 'is-invalid' : ''}
+                                />
                             </div>
                             {validationErrors.password && (
                                 <div className="d-flex flex-row align-items-center mb-2">

@@ -12,6 +12,7 @@ import {
   MDBIcon,
   MDBSpinner
 } from 'mdb-react-ui-kit';
+import PasswordInput from '../components/PasswordInput';
 import logo from '../assets/match_point_logo.png';
 
 const Login: React.FC = () => {
@@ -33,7 +34,14 @@ const Login: React.FC = () => {
 
                 <div className="d-flex flex-row align-items-center">
                   <MDBIcon fas icon="lock me-3" size='lg' />
-                  <MDBInput label='Password' id='password' type='password' value={form.password} onChange={handleChange} required />
+                  <PasswordInput 
+                    label='Password' 
+                    id='password' 
+                    name='password'
+                    value={form.password} 
+                    onChange={handleChange} 
+                    required 
+                  />
                 </div>
 
                 {error && <div className="text-danger">{error}</div>}

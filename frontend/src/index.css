@@ -249,3 +249,13 @@ body::before {
   border-color: #0d6efd;
   color: white;
 }
+
+/* Password Input Styles */
+.password-toggle-btn:hover {
+  color: #495057 !important;
+}
+
+.password-toggle-btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
