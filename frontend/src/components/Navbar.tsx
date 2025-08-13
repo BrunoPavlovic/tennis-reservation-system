@@ -32,15 +32,15 @@ const Navbar = () => {
     <MDBNavbar sticky fixed='top' light bgColor='light' className='shadow-3 mx-4 mt-3' style={{ borderRadius: '20px', backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.9)', zIndex: 1000 }}>
       <MDBContainer fluid className='px-0'>
 
-        <div className="d-none d-lg-flex justify-content-between align-items-center w-100 px-4">
-          <div className="d-flex align-items-center">
+        <div className="d-none d-lg-flex align-items-center w-100 px-4" style={{ position: 'relative', minHeight: '50px' }}>
+          <div className="d-flex align-items-center" style={{ position: 'absolute', left: '1.5rem', zIndex: 10 }}>
             <MDBNavbarBrand href='/home' className='d-flex align-items-center'>
               <img src={icon} alt='logo' width='32' height='32' className='me-2' />
               <span className="fw-bold">Match Point</span>
             </MDBNavbarBrand>
           </div>
 
-          <div className='d-flex justify-content-center'>
+          <div className='d-flex justify-content-center align-items-center' style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', zIndex: 5 }}>
             <MDBNavbarNav className='d-flex flex-row gap-4'>
               <MDBNavbarItem>
                 <MDBNavbarLink active={isActive('/home')} href='/home' className="fw-semibold">Home</MDBNavbarLink>
@@ -56,8 +56,7 @@ const Navbar = () => {
               </MDBNavbarItem>
             </MDBNavbarNav>
           </div>
-
-          <div className='d-flex align-items-center gap-4'>
+          <div className='d-flex align-items-center gap-4' style={{ position: 'absolute', right: '1.5rem', zIndex: 10 }}>
             <span className='text-success fw-bold'>
               <MDBIcon fas icon="money-bill-wave" className='me-2' />
               {isLoading ? '...' : `${credit.toFixed(2)} €`}
@@ -89,15 +88,10 @@ const Navbar = () => {
               </span>
             </span>
 
-            <MDBDropdown>
-              <MDBDropdownToggle tag='a' className='nav-link text-dark d-flex align-items-center' role='button'>
-                <MDBIcon icon="user" className='me-1' />
-                <span className="d-none d-sm-inline">{username}</span>
-              </MDBDropdownToggle>
-              <MDBDropdownMenu>
-                <MDBDropdownItem link onClick={logout}>Logout</MDBDropdownItem>
-              </MDBDropdownMenu>
-            </MDBDropdown>
+            <span className='text-dark small d-flex align-items-center'>
+              <MDBIcon icon="user" className='me-1' />
+              <span className="d-none d-sm-inline">{username}</span>
+            </span>
 
             <MDBNavbarToggler
               type="button"
@@ -126,6 +120,12 @@ const Navbar = () => {
               </MDBNavbarItem>
               <MDBNavbarItem>
                 <MDBNavbarLink active={isActive('/credit')} href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem>
+                <MDBNavbarLink onClick={logout} className="fw-semibold">
+                  <MDBIcon fas icon="sign-out-alt" className="me-2" />
+                  Logout
+                </MDBNavbarLink>
               </MDBNavbarItem>
             </MDBNavbarNav>
           </div>
