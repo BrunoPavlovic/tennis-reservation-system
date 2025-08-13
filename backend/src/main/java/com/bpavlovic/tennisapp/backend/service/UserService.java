@@ -95,7 +95,7 @@ public class UserService {
     }
 
     public Page<UserAdminDto> getAllUsers(Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable);
+        Page<User> users = userRepository.findAllNonAdminUsersOrderedByActive(pageable);
         return users.map(userAdminMapper::toDto);
     }
 
