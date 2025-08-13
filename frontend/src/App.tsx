@@ -28,7 +28,7 @@ const App: React.FC = () => {
           <Route path="/home" element={<UnAuthRedirect><Home /></UnAuthRedirect>} />
           <Route path="/reservation" element={<UnAuthRedirect><Reservation /></UnAuthRedirect>} />
           <Route path="/profile" element={<UnAuthRedirect><Profile/></UnAuthRedirect>} />
-          <Route path="/credit" element={<UnAuthRedirect><Credit /></UnAuthRedirect>} />
+          <Route path="/balance" element={<UnAuthRedirect><Credit /></UnAuthRedirect>} />
           <Route path="/payment-success" element={<UnAuthRedirect><PaymentSuccess /></UnAuthRedirect>} />
           <Route path="/payment-cancelled" element={<UnAuthRedirect><PaymentCancelled /></UnAuthRedirect>} />
         </Route>

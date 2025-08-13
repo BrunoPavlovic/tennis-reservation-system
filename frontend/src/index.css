@@ -269,3 +269,13 @@ body::before {
   outline: none !important;
   box-shadow: none !important;
 }
+
+/* Clickable Balance Styles */
+.clickable-balance {
+  transition: all 0.2s ease;
+}
+
+.clickable-balance:hover {
+  transform: scale(1.05);
+  opacity: 0.8;
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   MDBContainer,
   MDBNavbar,
@@ -23,6 +23,7 @@ const Navbar = () => {
   const { credit, isLoading } = useCredit();
   const [showNav, setShowNav] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -52,12 +53,17 @@ const Navbar = () => {
                 <MDBNavbarLink active={isActive('/profile')} href='/profile' className="fw-semibold">Profile</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink active={isActive('/credit')} href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
+                <MDBNavbarLink active={isActive('/balance')} href='/balance' className="fw-semibold">Balance</MDBNavbarLink>
               </MDBNavbarItem>
             </MDBNavbarNav>
           </div>
           <div className='d-flex align-items-center gap-4' style={{ position: 'absolute', right: '1.5rem', zIndex: 10 }}>
-            <span className='text-success fw-bold'>
+            <span
+              className='text-success fw-bold d-flex align-items-center clickable-balance'
+              style={{ cursor: 'pointer' }}
+              onClick={() => navigate('/balance')}
+              title="Click to view balance and transactions"
+            >
               <MDBIcon fas icon="money-bill-wave" className='me-2' />
               {isLoading ? '...' : `${credit.toFixed(2)} €`}
             </span>
@@ -75,34 +81,33 @@ const Navbar = () => {
         </div>
 
         <div className="d-lg-none d-flex align-items-center justify-content-between w-100 px-4">
+          <MDBNavbarToggler
+            type="button"
+            data-target="#navbarToggler"
+            aria-controls="navbarToggler"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            onClick={() => setShowNav(!showNav)}
+          >
+            <MDBIcon icon="bars" fas />
+          </MDBNavbarToggler>
           <MDBNavbarBrand href='/home' className='d-flex align-items-center'>
             <img src={icon} alt='logo' width='25' height='25' className='me-2' />
             <span className="fw-bold">Match Point</span>
           </MDBNavbarBrand>
 
           <div className='d-flex align-items-center gap-3'>
-            <span className='text-success fw-bold small d-flex align-items-center'>
+            <span
+              className='text-success fw-bold small d-flex align-items-center clickable-balance'
+              style={{ cursor: 'pointer' }}
+              onClick={() => navigate('/credit')}
+              title="Click to view balance and transactions"
+            >
               <MDBIcon fas icon="money-bill-wave" className='me-1' />
               <span className='text-nowrap'>
                 {isLoading ? '...' : `${credit.toFixed(2)}€`}
               </span>
             </span>
-
-            <span className='text-dark small d-flex align-items-center'>
-              <MDBIcon icon="user" className='me-1' />
-              <span className="d-none d-sm-inline">{username}</span>
-            </span>
-
-            <MDBNavbarToggler
-              type="button"
-              data-target="#navbarToggler"
-              aria-controls="navbarToggler"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-              onClick={() => setShowNav(!showNav)}
-            >
-              <MDBIcon icon="bars" fas />
-            </MDBNavbarToggler>
           </div>
         </div>
 
@@ -119,7 +124,7 @@ const Navbar = () => {
                 <MDBNavbarLink active={isActive('/profile')} href='/profile' className="fw-semibold">Profile</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink active={isActive('/credit')} href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
+                <MDBNavbarLink active={isActive('/balance')} href='/balance' className="fw-semibold">Balance</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
                 <MDBNavbarLink onClick={logout} className="fw-semibold">
