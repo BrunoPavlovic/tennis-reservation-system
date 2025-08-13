@@ -22,6 +22,7 @@ export interface Reservation {
 }
 
 export interface UserReservationOverview {
+  reservationId: number;
   clubName: string;
   courtName: string;
   date: string;

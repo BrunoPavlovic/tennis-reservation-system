@@ -30,6 +30,7 @@ public class ReservationDtoMapper {
 
     public ReservationOverviewDto toOverviewDto(Reservation reservation){
         ReservationOverviewDto reservationOverviewDto = new ReservationOverviewDto();
+        reservationOverviewDto.setReservationId(reservation.getReservationId());
         reservationOverviewDto.setDate(reservation.getDate().format(DATE_FORMATTER));
         reservationOverviewDto.setClubName(reservation.getCourt().getClub().getName());
         reservationOverviewDto.setCourtName(reservation.getCourt().getName());
