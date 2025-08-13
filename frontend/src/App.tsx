@@ -13,6 +13,7 @@ import Credit from "./views/Credit";
 import PaymentSuccess from "./views/PaymentSuccess";
 import PaymentCancelled from "./views/PaymentCancelled";
 import AdminClubs from "./views/AdminClubs";
+import AdminCourts from "./views/AdminCourts";
 import AdminUsers from "./views/AdminUsers";
 
 const App: React.FC = () => {
@@ -35,6 +36,7 @@ const App: React.FC = () => {
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<Navigate to="/admin/clubs"/>} />
           <Route path="/admin/clubs" element={<AdminRedirect><AdminClubs /></AdminRedirect>} />
+          <Route path="/admin/courts" element={<AdminRedirect><AdminCourts /></AdminRedirect>} />
           <Route path="/admin/users" element={<AdminRedirect><AdminUsers /></AdminRedirect>} />
         </Route>
       </Routes>

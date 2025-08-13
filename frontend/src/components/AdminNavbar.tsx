@@ -43,13 +43,16 @@ const AdminNavbar = () => {
             <MDBNavbarNav className='d-flex flex-row gap-4'>
               <MDBNavbarItem>
                 <MDBNavbarLink active={isActive('/admin/clubs')} href='/admin/clubs' className="fw-semibold">
-                  <MDBIcon fas icon="building" className="me-2" />
                   Clubs
                 </MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
+                <MDBNavbarLink active={isActive('/admin/courts')} href='/admin/courts' className="fw-semibold">
+                  Courts
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem>
                 <MDBNavbarLink active={isActive('/admin/users')} href='/admin/users' className="fw-semibold">
-                  <MDBIcon fas icon="users" className="me-2" />
                   Users
                 </MDBNavbarLink>
               </MDBNavbarItem>
@@ -116,6 +119,12 @@ const AdminNavbar = () => {
                 <MDBNavbarLink active={isActive('/admin/clubs')} href='/admin/clubs' className="fw-semibold">
                   <MDBIcon fas icon="building" className="me-2" />
                   Clubs
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem>
+                <MDBNavbarLink active={isActive('/admin/courts')} href='/admin/courts' className="fw-semibold">
+                  <MDBIcon fas icon="table-tennis" className="me-2" />
+                  Courts
                 </MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>

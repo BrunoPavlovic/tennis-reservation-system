@@ -13,3 +13,8 @@ export interface ClubAdmin{
     courtCount: number;
     memberCount: number;
 }
+
+export interface CourtAdmin{
+    name: string;
+    clubName: string;
+}

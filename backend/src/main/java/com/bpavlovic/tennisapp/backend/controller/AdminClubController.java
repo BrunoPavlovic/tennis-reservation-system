@@ -30,8 +30,6 @@ public class AdminClubController {
         }
     }
 
-
-
     @PostMapping
     public ResponseEntity<?> createClub(@RequestBody ClubAdminDto clubAdminDto) {
         try {
