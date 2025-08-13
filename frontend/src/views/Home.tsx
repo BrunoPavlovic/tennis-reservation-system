@@ -1,12 +1,20 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   MDBCarousel,
   MDBCarouselItem,
   MDBCarouselCaption,
-  MDBBtn
+  MDBBtn,
+  MDBIcon
 } from "mdb-react-ui-kit";
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleReserveNow = () => {
+    navigate('/reservation');
+  };
+
   return (
     <div className="home-carousel-container">
       <MDBCarousel showIndicators showControls fade className="home-carousel">
@@ -43,6 +51,15 @@ const Home: React.FC = () => {
           <MDBCarouselCaption>
             <h2 className="text-white fw-bold display-4">Easy Booking System</h2>
             <p className="text-white fs-5">Reserve your court in seconds with our intuitive platform</p>
+            <MDBBtn 
+              color="success" 
+              size="lg" 
+              className="mt-3 fw-bold px-4 py-2"
+              onClick={handleReserveNow}
+            >
+              <MDBIcon fas icon="calendar-plus" className="me-2" />
+              Reserve Court Now
+            </MDBBtn>
           </MDBCarouselCaption>
         </MDBCarouselItem>
       </MDBCarousel>

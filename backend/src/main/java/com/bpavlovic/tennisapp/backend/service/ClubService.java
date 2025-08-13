@@ -34,6 +34,7 @@ public class ClubService {
                 .collect(Collectors.toList());
     }
 
+    @Cacheable(value = "clubs")
     public Club getClubByName(String clubName){
         System.out.println("Looking for club with name: " + clubName);
         Club club = clubRepository.findByName(clubName);

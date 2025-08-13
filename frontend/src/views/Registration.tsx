@@ -16,6 +16,7 @@ import {
     MDBSpinner
 }
 from 'mdb-react-ui-kit';
+import PasswordInput from '../components/PasswordInput';
 
 const Register: React.FC = () => {
     const { form, clubs, error, validationErrors, isLoading, handleChange, handleSubmit } = useRegister();
@@ -31,9 +32,39 @@ const Register: React.FC = () => {
                             <form onSubmit={handleSubmit} className="w-100 d-flex flex-column gap-3">
                             <div className="d-flex flex-row align-items-center mb-4 ">
                                 <MDBIcon fas icon="user me-3" size='lg' />
-                                <MDBInput label='First Name' id='firstName' name="firstName" type='text' value={form.firstName} onChange={handleChange} required />
-                                <MDBInput label='Last Name' id='lastName' name="lastName" type='text' value={form.lastName} onChange={handleChange} required/>
+                                <MDBInput 
+                                    label='First Name' 
+                                    id='firstName' 
+                                    name="firstName" 
+                                    type='text' 
+                                    value={form.firstName} 
+                                    onChange={handleChange} 
+                                    required
+                                    maxLength={25}
+                                    className={validationErrors.firstName ? 'is-invalid' : ''}
+                                />
+                                <MDBInput 
+                                    label='Last Name' 
+                                    id='lastName' 
+                                    name="lastName" 
+                                    type='text' 
+                                    value={form.lastName} 
+                                    onChange={handleChange} 
+                                    required
+                                    maxLength={25}
+                                    className={validationErrors.lastName ? 'is-invalid' : ''}
+                                />
                             </div>
+                            {(validationErrors.firstName || validationErrors.lastName) && (
+                                <div className="d-flex flex-row align-items-center mb-2">
+                                    {validationErrors.firstName && (
+                                        <div className="invalid-feedback d-block me-3">{validationErrors.firstName}</div>
+                                    )}
+                                    {validationErrors.lastName && (
+                                        <div className="invalid-feedback d-block">{validationErrors.lastName}</div>
+                                    )}
+                                </div>
+                            )}
                             <div className="d-flex flex-row align-items-center mb-4">
                                 <MDBIcon fas icon="envelope me-3" size='lg' />
                                 <MDBInput label='Your Email' id='email' type='email' name="email" value={form.email} onChange={handleChange} required
@@ -47,8 +78,15 @@ const Register: React.FC = () => {
 
                             <div className="d-flex flex-row align-items-center mb-4">
                                 <MDBIcon fas icon="lock me-3" size='lg' />
-                                <MDBInput label='Password' id='password' type='password' name="password" value={form.password} onChange={handleChange} required
-                                    className={validationErrors.password ? 'is-invalid' : ''}/>
+                                <PasswordInput 
+                                    label='Password' 
+                                    id='password' 
+                                    name="password" 
+                                    value={form.password} 
+                                    onChange={handleChange} 
+                                    required
+                                    className={validationErrors.password ? 'is-invalid' : ''}
+                                />
                             </div>
                             {validationErrors.password && (
                                 <div className="d-flex flex-row align-items-center mb-2">

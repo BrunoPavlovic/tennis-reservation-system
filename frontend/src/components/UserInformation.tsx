@@ -8,6 +8,7 @@ import {
   MDBInput,
   MDBSpinner
 } from "mdb-react-ui-kit";
+import PasswordInput from "./PasswordInput";
 import { useProfile } from "../hooks/useProfile";
 
 const UserInformation: React.FC = () => {
@@ -213,9 +214,9 @@ const UserInformation: React.FC = () => {
             </div>
             
             <div className="mb-3">
-              <MDBInput
+              <PasswordInput
                 label="Current Password"
-                type="password"
+                id="currentPassword"
                 name="currentPassword"
                 value={passwordForm.currentPassword}
                 onChange={handlePasswordFormChange}
@@ -224,9 +225,9 @@ const UserInformation: React.FC = () => {
             </div>
             
             <div className="mb-3">
-              <MDBInput
+              <PasswordInput
                 label="New Password"
-                type="password"
+                id="newPassword"
                 name="newPassword"
                 value={passwordForm.newPassword}
                 onChange={handlePasswordFormChange}
@@ -235,9 +236,9 @@ const UserInformation: React.FC = () => {
             </div>
             
             <div className="mb-4">
-              <MDBInput
+              <PasswordInput
                 label="Confirm New Password"
-                type="password"
+                id="confirmPassword"
                 name="confirmPassword"
                 value={passwordForm.confirmPassword}
                 onChange={handlePasswordFormChange}

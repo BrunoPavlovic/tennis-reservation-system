@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   MDBContainer,
   MDBNavbar,
@@ -23,6 +23,7 @@ const Navbar = () => {
   const { credit, isLoading } = useCredit();
   const [showNav, setShowNav] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -32,15 +33,15 @@ const Navbar = () => {
     <MDBNavbar sticky fixed='top' light bgColor='light' className='shadow-3 mx-4 mt-3' style={{ borderRadius: '20px', backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.9)', zIndex: 1000 }}>
       <MDBContainer fluid className='px-0'>
 
-        <div className="d-none d-lg-flex justify-content-between align-items-center w-100 px-4">
-          <div className="d-flex align-items-center">
+        <div className="d-none d-lg-flex align-items-center w-100 px-4" style={{ position: 'relative', minHeight: '50px' }}>
+          <div className="d-flex align-items-center" style={{ position: 'absolute', left: '1.5rem', zIndex: 10 }}>
             <MDBNavbarBrand href='/home' className='d-flex align-items-center'>
               <img src={icon} alt='logo' width='32' height='32' className='me-2' />
               <span className="fw-bold">Match Point</span>
             </MDBNavbarBrand>
           </div>
 
-          <div className='d-flex justify-content-center'>
+          <div className='d-flex justify-content-center align-items-center' style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', zIndex: 5 }}>
             <MDBNavbarNav className='d-flex flex-row gap-4'>
               <MDBNavbarItem>
                 <MDBNavbarLink active={isActive('/home')} href='/home' className="fw-semibold">Home</MDBNavbarLink>
@@ -52,13 +53,17 @@ const Navbar = () => {
                 <MDBNavbarLink active={isActive('/profile')} href='/profile' className="fw-semibold">Profile</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink active={isActive('/credit')} href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
+                <MDBNavbarLink active={isActive('/balance')} href='/balance' className="fw-semibold">Balance</MDBNavbarLink>
               </MDBNavbarItem>
             </MDBNavbarNav>
           </div>
-
-          <div className='d-flex align-items-center gap-4'>
-            <span className='text-success fw-bold'>
+          <div className='d-flex align-items-center gap-4' style={{ position: 'absolute', right: '1.5rem', zIndex: 10 }}>
+            <span
+              className='text-success fw-bold d-flex align-items-center clickable-balance'
+              style={{ cursor: 'pointer' }}
+              onClick={() => navigate('/balance')}
+              title="Click to view balance and transactions"
+            >
               <MDBIcon fas icon="money-bill-wave" className='me-2' />
               {isLoading ? '...' : `${credit.toFixed(2)} €`}
             </span>
@@ -76,39 +81,33 @@ const Navbar = () => {
         </div>
 
         <div className="d-lg-none d-flex align-items-center justify-content-between w-100 px-4">
+          <MDBNavbarToggler
+            type="button"
+            data-target="#navbarToggler"
+            aria-controls="navbarToggler"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            onClick={() => setShowNav(!showNav)}
+          >
+            <MDBIcon icon="bars" fas />
+          </MDBNavbarToggler>
           <MDBNavbarBrand href='/home' className='d-flex align-items-center'>
             <img src={icon} alt='logo' width='25' height='25' className='me-2' />
             <span className="fw-bold">Match Point</span>
           </MDBNavbarBrand>
 
           <div className='d-flex align-items-center gap-3'>
-            <span className='text-success fw-bold small d-flex align-items-center'>
+            <span
+              className='text-success fw-bold small d-flex align-items-center clickable-balance'
+              style={{ cursor: 'pointer' }}
+              onClick={() => navigate('/credit')}
+              title="Click to view balance and transactions"
+            >
               <MDBIcon fas icon="money-bill-wave" className='me-1' />
               <span className='text-nowrap'>
                 {isLoading ? '...' : `${credit.toFixed(2)}€`}
               </span>
             </span>
-
-            <MDBDropdown>
-              <MDBDropdownToggle tag='a' className='nav-link text-dark d-flex align-items-center' role='button'>
-                <MDBIcon icon="user" className='me-1' />
-                <span className="d-none d-sm-inline">{username}</span>
-              </MDBDropdownToggle>
-              <MDBDropdownMenu>
-                <MDBDropdownItem link onClick={logout}>Logout</MDBDropdownItem>
-              </MDBDropdownMenu>
-            </MDBDropdown>
-
-            <MDBNavbarToggler
-              type="button"
-              data-target="#navbarToggler"
-              aria-controls="navbarToggler"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-              onClick={() => setShowNav(!showNav)}
-            >
-              <MDBIcon icon="bars" fas />
-            </MDBNavbarToggler>
           </div>
         </div>
 
@@ -125,7 +124,13 @@ const Navbar = () => {
                 <MDBNavbarLink active={isActive('/profile')} href='/profile' className="fw-semibold">Profile</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink active={isActive('/credit')} href='/credit' className="fw-semibold">Credit</MDBNavbarLink>
+                <MDBNavbarLink active={isActive('/balance')} href='/balance' className="fw-semibold">Balance</MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem>
+                <MDBNavbarLink onClick={logout} className="fw-semibold">
+                  <MDBIcon fas icon="sign-out-alt" className="me-2" />
+                  Logout
+                </MDBNavbarLink>
               </MDBNavbarItem>
             </MDBNavbarNav>
           </div>

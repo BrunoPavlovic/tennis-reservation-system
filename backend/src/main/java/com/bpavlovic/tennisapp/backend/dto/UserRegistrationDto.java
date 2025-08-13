@@ -6,8 +6,10 @@ import lombok.Data;
 @Data
 public class UserRegistrationDto {
     @NotBlank
+    @Size(max = 25, message = "First name must be 25 characters or less")
     private String firstName;
     @NotBlank
+    @Size(max = 25, message = "Last name must be 25 characters or less")
     private String lastName;
     @Email
     private String email;

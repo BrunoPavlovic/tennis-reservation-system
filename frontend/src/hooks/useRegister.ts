@@ -23,6 +23,8 @@ export const useRegister = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
 
+    if (form.firstName.length > 25) errors.firstName = "First name must be 25 characters or less";
+    if (form.lastName.length > 25) errors.lastName = "Last name must be 25 characters or less";    
     if (!emailRegex.test(form.email)) errors.email = "Valid email is required (e.g. bpavlovic@foi.hr)";
     if (!passwordRegex.test(form.password)) errors.password = "Password ( 12 characters, 1 uppercase, 1 lowercase,1 number and 1 special character )";
 
