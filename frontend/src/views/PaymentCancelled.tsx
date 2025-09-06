@@ -7,7 +7,7 @@ const PaymentCancelled: React.FC = () => {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            navigate('/credit');
+            navigate('/balance');
         }, 3000);
         return () => clearTimeout(timer);
     }, [navigate]);

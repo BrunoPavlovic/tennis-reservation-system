@@ -100,7 +100,7 @@ const Navbar = () => {
             <span
               className='text-success fw-bold small d-flex align-items-center clickable-balance'
               style={{ cursor: 'pointer' }}
-              onClick={() => navigate('/credit')}
+              onClick={() => navigate('/balance')}
               title="Click to view balance and transactions"
             >
               <MDBIcon fas icon="money-bill-wave" className='me-1' />
